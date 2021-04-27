@@ -2,22 +2,16 @@
 // which is responsible for showing Search Bar. The component has
 // been implemented on the basis of: https://material-ui.com/components/app-bar/
 
-
 import React, { useRef, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
-import InputBase from '@material-ui/core/InputBase';
-import IconButton from '@material-ui/core/IconButton';
+import { IconButton, AppBar, Toolbar, Typography, InputBase } from '@material-ui/core';
 import SearchIcon from '@material-ui/icons/Search';
 import CloseIcon from '@material-ui/icons/Close';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 
 
 export default function CustomAppBar(props) {
-    // Styles:
-    const classes = useStyles();
+    const styles = useStyles();
 
     // State responsible for displaying correct view 
     // - bar with title and button if false OR searchbar if true:
@@ -35,12 +29,12 @@ export default function CustomAppBar(props) {
     
     // Rendering:
     return(
-        <div className={classes.root}>
-            <AppBar position="static" className={classes.appBar}>
+        <div className={styles.root}>
+            <AppBar position="static" className={styles.appBar}>
             {isSearching 
             ?
             <Toolbar> 
-                    <IconButton className={classes.backButton} 
+                    <IconButton className={styles.backButton} 
                                 onClick={() => { 
                                     setIsSearching(false); 
                                     setCanClear(false);
@@ -48,9 +42,9 @@ export default function CustomAppBar(props) {
                         <ArrowBackIcon/>
                     </IconButton>
                 {/* Searchbar */}
-                <div className={classes.searchBar}>
+                <div className={styles.searchBar}>
                     {/* Search */}
-                    <IconButton className={classes.searchBarButton} 
+                    <IconButton className={styles.searchBarButton} 
                                 onClick={searchButtonEvent}>
                         <SearchIcon/>
                     </IconButton>
@@ -58,11 +52,11 @@ export default function CustomAppBar(props) {
                     <InputBase placeholder="Search for recipe"
                                inputRef={searchBarInput}
                                onChange={(input) => setCanClear(input.target.value.length > 0)}
-                               className={classes.searchBarInput}/>
+                               className={styles.searchBarInput}/>
                     {/* Clear */}
                     {canClear
                     ? 
-                    <IconButton className={classes.searchBarButton} 
+                    <IconButton className={styles.searchBarButton} 
                                 onClick={() => { 
                                     searchBarInput.current.value = ""; 
                                     setCanClear(false);
@@ -76,8 +70,8 @@ export default function CustomAppBar(props) {
             </Toolbar>
             :
             <Toolbar> {/* Title + button */}
-                <Typography className={classes.title}>Recipes</Typography>
-                <IconButton className={classes.searchButton} 
+                <Typography className={styles.title}>Recipes</Typography>
+                <IconButton className={styles.searchButton} 
                             onClick={() => { setIsSearching(true); }}>
                     <SearchIcon/>
                 </IconButton>
