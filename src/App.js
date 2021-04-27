@@ -5,7 +5,7 @@ import CustomAppBar from './components/CustomAppBar';
 function App() {
   return (
     <div className="App">
-      <CustomAppBar/>
+      <CustomAppBar search={(output) => console.log(output)}/>
       <p>[Empty Page]</p>
     </div>
   );

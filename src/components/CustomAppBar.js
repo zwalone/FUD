@@ -3,7 +3,7 @@
 // been implemented on the basis of: https://material-ui.com/components/app-bar/
 
 
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -11,16 +11,27 @@ import Typography from '@material-ui/core/Typography';
 import InputBase from '@material-ui/core/InputBase';
 import IconButton from '@material-ui/core/IconButton';
 import SearchIcon from '@material-ui/icons/Search';
-import CloseIcon from '@material-ui/icons/Close'
+import CloseIcon from '@material-ui/icons/Close';
+import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 
 
-export default function CustomAppBar() {
+export default function CustomAppBar(props) {
     // Styles:
     const classes = useStyles();
 
     // State responsible for displaying correct view 
     // - bar with title and button if false OR searchbar if true:
     const [isSearching, setIsSearching] = useState(false);
+
+    // State responsible for displaying "clear button" 
+    // only if there is anything to clear:
+    const [canClear, setCanClear] = useState(false);
+    
+    // Searchbar's value:
+    const searchBarInput = useRef("");
+
+    // Reacting for clicking search button in search bar:
+    const searchButtonEvent = () => props.search(searchBarInput.current.value);
     
     // Rendering:
     return(
@@ -28,24 +39,46 @@ export default function CustomAppBar() {
             <AppBar position="static" className={classes.appBar}>
             {isSearching 
             ?
-            <Toolbar> {/* Searchbar */}
+            <Toolbar> 
+                    <IconButton className={classes.backButton} 
+                                onClick={() => { 
+                                    setIsSearching(false); 
+                                    setCanClear(false);
+                                }}>
+                        <ArrowBackIcon/>
+                    </IconButton>
+                {/* Searchbar */}
                 <div className={classes.searchBar}>
+                    {/* Search */}
                     <IconButton className={classes.searchBarButton} 
-                                onClick={() => {}}>
+                                onClick={searchButtonEvent}>
                         <SearchIcon/>
                     </IconButton>
-                    <InputBase placeholder="Search for recipe" className={classes.searchBarInput}/>
+                    {/* Input */}
+                    <InputBase placeholder="Search for recipe"
+                               inputRef={searchBarInput}
+                               onChange={(input) => setCanClear(input.target.value.length > 0)}
+                               className={classes.searchBarInput}/>
+                    {/* Clear */}
+                    {canClear
+                    ? 
                     <IconButton className={classes.searchBarButton} 
-                                onClick={() => setIsSearching(false)}>
+                                onClick={() => { 
+                                    searchBarInput.current.value = ""; 
+                                    setCanClear(false);
+                                }}>
                         <CloseIcon/>
                     </IconButton>
+                    :
+                    <></>
+                    }
                 </div>
             </Toolbar>
             :
             <Toolbar> {/* Title + button */}
                 <Typography className={classes.title}>Recipes</Typography>
                 <IconButton className={classes.searchButton} 
-                            onClick={() => setIsSearching(true)}>
+                            onClick={() => { setIsSearching(true); }}>
                     <SearchIcon/>
                 </IconButton>
             </Toolbar>
@@ -67,6 +100,7 @@ const useStyles = makeStyles((theme) => ({
         textAlign: 'left', 
         color: 'rgba(255, 255, 255, 0.75)',
         fontSize: 20,
+        userSelect: 'none'
     },
     searchButton: { 
         padding: 0, 
@@ -74,6 +108,10 @@ const useStyles = makeStyles((theme) => ({
     },
 
     // SearchBar variant:
+    backButton: {
+        paddingLeft: 0, 
+        color: 'rgba(255, 255, 255, 0.75)' 
+    },
     searchBar: { 
         borderRadius: '4px', 
         backgroundColor: 'rgba(255, 255, 255, 0.75)', 
