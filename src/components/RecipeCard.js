@@ -6,6 +6,10 @@ import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import Typography from '@material-ui/core/Typography';
 
+//title: string,
+//subtitle: string
+//onClick: () => void 
+//image: string, link to an image or image object (more info at https://material-ui.com/api/card-media/)
 export default function RecipeCard ({ title, subTitle, image, onClick }) {
     const classes = useStyles();
 
