@@ -1,29 +1,58 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import Image from 'material-ui-image';
-import { List, ListItem } from '@material-ui/core';
-import { Accordion, Typography, AccordionSummary, AccordionDetails, Avatar } from '@material-ui/core';
+import { Accordion, Typography, AccordionSummary, AccordionDetails } from '@material-ui/core';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import { CallReceived } from '@material-ui/icons';
 import CloseIcon from '@material-ui/icons/Close';
 import LinkIcon from '@material-ui/icons/Link';
 import Button from '@material-ui/core/Button';
 import AddIcon from '@material-ui/icons/Add';
 import Fab from '@material-ui/core/Fab';
 
+//Example JSON
+const recipe = {
+    image: "https://images.immediate.co.uk/production/volatile/sites/30/2020/08/chorizo-mozarella-gnocchi-bake-cropped-9ab73a3.jpg?quality=90&resize=960,872",
+    title: "Egg Breakfast",
+    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque arcu ante, maximus eu dui sit amet, tempus mattis neque. Ut leo elit, gravida non sagittis ac, placerat id nibh. Donec volutpat urna ut laoreet venenatis. Nulla tempor lorem id venenatis maximus. Duis a leo vel neque auctor tincidunt. Donec ac dolor sed enim elementum tristique.",
+    kcal: 320,
+    sevings: 2,
+    nutrients: [
+      {label: "Calories", quantity: 320, unit: "kcal"},
+      {label: "Protein", quantity: 30, unit: "gl"}, 
+      {label: "Fat", quantity: 40, unit: "g"},
+      {label: "Sugar", quantity: 85, unit: "g"},
+      {label: "Sodium", quantity: 5, unit: "mg"},
+      {label: "Carbohydrate ", quantity: 60, unit: "g"},
+      {label: "Vitamin A", quantity: 2, unit: "ng"},
+    ]
+  }
+//   <RecipeDetails
+//   image={recipe.image}
+//   title={recipe.title}
+//   description={recipe.description}
+//   nutrients={recipe.nutrients}
+//   kcal={recipe.kcal} 
+//   sevings={recipe.sevings}
+// />
+
 export default function RecipeDetails({ image, title, description, nutrients, kcal, sevings }) {
+    
     const styles = useStyles();
 
     return (
         <div className={styles.container}>
+
+            {/* {Image & icons} */}
+
             <div className={styles.imageBox}>
                 <div className={styles.details}>
                     <Button className={styles.IconLeft}><CloseIcon /> </Button>
                     <Button className={styles.IconRight}><LinkIcon /> </Button>
                 </div>
                 <img className={styles.image} src={image} />
-
             </div>
+
+             {/* {Title} */}
+
             <div className={styles.safeArea}>
                 <Typography className={styles.title}>{title}</Typography>
                 <div className={styles.details}>
@@ -58,7 +87,6 @@ export default function RecipeDetails({ image, title, description, nutrients, kc
                     <Typography>Description</Typography>
                 </AccordionSummary>
                 <AccordionDetails>
-
                     <Typography className={styles.description}>{description}</Typography>
                 </AccordionDetails>
             </Accordion>
@@ -85,8 +113,10 @@ export default function RecipeDetails({ image, title, description, nutrients, kc
                         )
                     })}
                 </div>
-
             </Accordion>
+
+            {/* Add Favorites button */}
+
             <Fab className={styles.floatingButton}  color="secondary">
                 <AddIcon />
             </Fab>
@@ -159,11 +189,5 @@ const useStyles = makeStyles((theme) => ({
         position: 'fixed',
         bottom: 15,
         right: 15,
-    },
-
-    hl: {
-        backgroundColor: 'green',
-
     }
-
 }))
