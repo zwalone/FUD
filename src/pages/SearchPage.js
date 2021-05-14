@@ -1,20 +1,23 @@
-// GridList based on: https://material-ui.com/components/grid-list/
-
-import React, { Fragment } from 'react';
+import React, { Fragment, useContext } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import GridList from '@material-ui/core/GridList';
 import RecipeCard from '../components/RecipeCard';
+import CustomAppBar from '../components/CustomAppBar';
+import { RecipeDataContext } from '../data/RecipeDataContext';
 
-export default function SearchPage({recipes}) {
+// GridList used in this component bases on: https://material-ui.com/components/grid-list/
+export default function SearchPage() {
     const classes = useStyles();
+    const { recipes, setPhrase } = useContext(RecipeDataContext);
     return (
         <Fragment>
+            <CustomAppBar onSearch={input => setPhrase(input)}/>
             <div className={classes.root}>
                 <GridList className={classes.gridList}>
                 {recipes.map(recipe => <RecipeCard
                     title={recipe.label} subTitle={recipe.calories} 
-                    image={recipe.image} key={recipe.uri} 
-                    onClick={() => {}}/>)}
+                    image={recipe.image} key={recipe.url} 
+                    onClick={() => {console.log(recipe)}}/>)}
                 </GridList>
             </div>
         </Fragment>

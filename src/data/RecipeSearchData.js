@@ -25,8 +25,7 @@ const prepareCustomJSONs = (jsons) => {
     calories: Math.round(json.recipe.calories) + " kcal",
     url: json.recipe.url,
     servings: json.recipe.yield + " servings",
-    description: "No description", //THERE IS NO DESCRIPTION IN RESPONSE?
-    ingredients: json.recipe.ingredientLines, // LIST OF STRINGS?
+    ingredients: json.recipe.ingredientLines,
     nutrients: prepareNutrientsArray(json.recipe.totalNutrients)
   }))
 }
