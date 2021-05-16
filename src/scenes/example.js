@@ -32,11 +32,11 @@ export default function Example () {
     //Pass there json item to render. 
     //Item is comes from RecipeCard, if there will be store this json use item.
     //Another delete this
-    const OnClickItem = () => {
+    const OnClickItem = (item) => {
         history.push({
             pathname: '/recipeDetail',
             state: {
-                json: recipes[0]
+                json: item
             }
         })
     }
@@ -49,9 +49,9 @@ export default function Example () {
             {recipes.map((recipe, key) => {
                 return  (<RecipeCard key={key} 
                 title={recipe.title}
-                subTitle=""
+                subTitle={recipe.kcal}
                 image={recipe.image}
-                onClick={OnClickItem}/>)
+                onClick={() => OnClickItem(recipe)}/>)
             })}
         </div>
     )
