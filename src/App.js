@@ -1,15 +1,22 @@
 import React from 'react';
 import './App.css';
-import CustomAppBar from './components/CustomAppBar';
+import { BrowserRouter as Router, Switch , Route} from 'react-router-dom'
+import RecipeDetails from './scenes/RecipeDetails'
+
+//to delete after change
+import Example from './scenes/example'
 
 function App() {
 
   return (
-    <div className="App">
-      <CustomAppBar search={(output) => console.log(output)}/>
-      <p>[Empty Page]</p>
-      <img alt="test" src="https://www.edamam.com/web-img/e42/e42f9119813e890af34c259785ae1cfb.jpg"/>
-    </div>
+    <Router>
+      <div className="App">
+        <Switch>
+          <Route path="/" exact component={Example} />
+          <Route path="/recipeDetail" exact component={RecipeDetails}/>
+        </Switch>
+      </div>
+    </Router>
   );
 }
 

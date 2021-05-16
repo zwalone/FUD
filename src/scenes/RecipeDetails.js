@@ -7,6 +7,7 @@ import LinkIcon from '@material-ui/icons/Link';
 import Button from '@material-ui/core/Button';
 import AddIcon from '@material-ui/icons/Add';
 import Fab from '@material-ui/core/Fab';
+import { useHistory } from 'react-router-dom';
 
 //Example JSON
 const recipe = {
@@ -34,9 +35,15 @@ const recipe = {
 //   sevings={recipe.sevings}
 // />
 
-export default function RecipeDetails({ image, title, description, nutrients, kcal, sevings }) {
+export default function RecipeDetails(props) {
     
     const styles = useStyles();
+    const { image, title, description, nutrients, kcal, sevings } = props.location.state.json
+
+    const history = useHistory()
+    const OnClickClose = () => {
+        history.goBack();
+    }
 
     return (
         <div className={styles.container}>
@@ -45,7 +52,7 @@ export default function RecipeDetails({ image, title, description, nutrients, kc
 
             <div className={styles.imageBox}>
                 <div className={styles.details}>
-                    <Button className={styles.IconLeft}><CloseIcon /> </Button>
+                    <Button onClick={() => OnClickClose()} className={styles.IconLeft}><CloseIcon /> </Button>
                     <Button className={styles.IconRight}><LinkIcon /> </Button>
                 </div>
                 <img className={styles.image} src={image} />
