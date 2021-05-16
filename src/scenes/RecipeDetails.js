@@ -7,24 +7,8 @@ import LinkIcon from '@material-ui/icons/Link';
 import Button from '@material-ui/core/Button';
 import AddIcon from '@material-ui/icons/Add';
 import Fab from '@material-ui/core/Fab';
+import { useHistory } from 'react-router-dom';
 
-//Example JSON
-const recipe = {
-    image: "https://images.immediate.co.uk/production/volatile/sites/30/2020/08/chorizo-mozarella-gnocchi-bake-cropped-9ab73a3.jpg?quality=90&resize=960,872",
-    title: "Egg Breakfast",
-    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque arcu ante, maximus eu dui sit amet, tempus mattis neque. Ut leo elit, gravida non sagittis ac, placerat id nibh. Donec volutpat urna ut laoreet venenatis. Nulla tempor lorem id venenatis maximus. Duis a leo vel neque auctor tincidunt. Donec ac dolor sed enim elementum tristique.",
-    kcal: 320,
-    sevings: 2,
-    nutrients: [
-      {label: "Calories", quantity: 320, unit: "kcal"},
-      {label: "Protein", quantity: 30, unit: "gl"}, 
-      {label: "Fat", quantity: 40, unit: "g"},
-      {label: "Sugar", quantity: 85, unit: "g"},
-      {label: "Sodium", quantity: 5, unit: "mg"},
-      {label: "Carbohydrate ", quantity: 60, unit: "g"},
-      {label: "Vitamin A", quantity: 2, unit: "ng"},
-    ]
-  }
 //   <RecipeDetails
 //   image={recipe.image}
 //   title={recipe.title}
@@ -34,9 +18,15 @@ const recipe = {
 //   sevings={recipe.sevings}
 // />
 
-export default function RecipeDetails({ image, title, description, nutrients, kcal, sevings }) {
+export default function RecipeDetails(props) {
     
     const styles = useStyles();
+    const { image, title, description, nutrients, kcal, sevings } = props.location.state.json
+
+    const history = useHistory()
+    const OnClickClose = () => {
+        history.goBack();
+    }
 
     return (
         <div className={styles.container}>
@@ -45,7 +35,7 @@ export default function RecipeDetails({ image, title, description, nutrients, kc
 
             <div className={styles.imageBox}>
                 <div className={styles.details}>
-                    <Button className={styles.IconLeft}><CloseIcon /> </Button>
+                    <Button onClick={() => OnClickClose()} className={styles.IconLeft}><CloseIcon /> </Button>
                     <Button className={styles.IconRight}><LinkIcon /> </Button>
                 </div>
                 <img className={styles.image} src={image} />
@@ -137,14 +127,14 @@ const useStyles = makeStyles((theme) => ({
     },
     IconLeft: {
         position: 'absolute',
-        top: '8px',
-        left: '16px',
+        top: 8,
+        left: 16,
         color: 'white',
     },
     IconRight: {
         position: 'absolute',
-        top: '8px',
-        right: '16px',
+        top: 8,
+        right: 16,
         color: 'white',
     },
     title: {

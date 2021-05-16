@@ -1,19 +1,21 @@
-import React, { useState } from 'react';
+import React from 'react';
 import './App.css';
-import BottomNavigationBar from './components/BottomNavigation';
 import { RecipeDataProvider } from './data/RecipeDataContext';
-import FavoritePage from './pages/FavoritePage';
-import SearchPage from './pages/SearchPage';
+import { BrowserRouter as Router, Switch , Route} from 'react-router-dom'
+import RecipeDetails from './scenes/RecipeDetails'
+import MainPages from './pages/MainPages'
 
 export default function App() {
-  const [value, setValue] = useState("favorites");
-  
   return (
     <RecipeDataProvider>
-      <div className="App">
-        { value === "search" ? <SearchPage/> : <FavoritePage/> }
-        <BottomNavigationBar onChange={(_, newValue) => setValue(newValue)}/>
-      </div>
+      <Router>
+        <div className="App">
+          <Switch>
+            <Route path="/" exact component={MainPages} />
+            <Route path="/recipeDetail" exact component={RecipeDetails}/>
+          </Switch>
+        </div>
+      </Router>
     </RecipeDataProvider>
   );
 }
