@@ -15,7 +15,7 @@ export default function RecipeCard ({ title, subTitle, image, onClick }) {
 
     return (
         <Card className={classes.root} 
-            onClick={() => {onClick({image: image, title: title})}}>
+            onClick={() => {onClick()}}>
             <CardActionArea>
                 <CardMedia
                     className={classes.media}

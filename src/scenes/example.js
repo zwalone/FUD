@@ -31,7 +31,7 @@ export default function Example () {
     //Pass there json item to render. 
     //Item is comes from RecipeCard, if there will be store this json use item.
     //Another delete this
-    const OnClickItem = (item) => {
+    const OnClickItem = () => {
         history.push({
             pathname: '/recipeDetail',
             state: {
