@@ -1,26 +1,32 @@
 import React, { Fragment, useContext } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import GridList from '@material-ui/core/GridList';
 import RecipeCard from '../components/RecipeCard';
 import CustomAppBar from '../components/CustomAppBar';
 import { RecipeDataContext } from '../data/RecipeDataContext';
 import { Grid } from '@material-ui/core';
+import { useHistory } from 'react-router-dom';
 
-// GridList used in this component bases on: https://material-ui.com/components/grid-list/
 export default function SearchPage() {
     const classes = useStyles();
-    const { recipes, setPhrase } = useContext(RecipeDataContext);
+    const { recipes, setPhrase, setCurrentRecipe } = useContext(RecipeDataContext);
+    const history = useHistory();
+
+    const OnClickItem = (item) => {
+        setCurrentRecipe(item);
+        history.push({ pathname: '/recipeDetails' })
+    }
+
     return (
         <Fragment>
             <CustomAppBar onSearch={input => setPhrase(input)}/>
             <div className={classes.root}>
                 <Grid container spacing={1} justify='center'>
                 {recipes.map(recipe => 
-                    <Grid item xs={6}>
+                    <Grid item xs={6} key={recipe.url}>
                         <RecipeCard
                             title={recipe.label} subTitle={recipe.calories} 
                             image={recipe.image} key={recipe.url} 
-                            onClick={() => {console.log(recipe)}}/>
+                            onClick={() => OnClickItem(recipe)}/>
                     </Grid>
                 )}
                 </Grid>
