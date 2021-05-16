@@ -4,6 +4,7 @@ import GridList from '@material-ui/core/GridList';
 import RecipeCard from '../components/RecipeCard';
 import CustomAppBar from '../components/CustomAppBar';
 import { RecipeDataContext } from '../data/RecipeDataContext';
+import { Grid } from '@material-ui/core';
 
 // GridList used in this component bases on: https://material-ui.com/components/grid-list/
 export default function SearchPage() {
@@ -13,12 +14,16 @@ export default function SearchPage() {
         <Fragment>
             <CustomAppBar onSearch={input => setPhrase(input)}/>
             <div className={classes.root}>
-                <GridList className={classes.gridList}>
-                {recipes.map(recipe => <RecipeCard
-                    title={recipe.label} subTitle={recipe.calories} 
-                    image={recipe.image} key={recipe.url} 
-                    onClick={() => {console.log(recipe)}}/>)}
-                </GridList>
+                <Grid container spacing={1} justify='center'>
+                {recipes.map(recipe => 
+                    <Grid item xs={6}>
+                        <RecipeCard
+                            title={recipe.label} subTitle={recipe.calories} 
+                            image={recipe.image} key={recipe.url} 
+                            onClick={() => {console.log(recipe)}}/>
+                    </Grid>
+                )}
+                </Grid>
             </div>
         </Fragment>
     )
@@ -26,16 +31,7 @@ export default function SearchPage() {
 
 const useStyles = makeStyles((theme) => ({
     root: {
-      display: 'flex',
-      flexWrap: 'wrap',
-      justifyContent: 'space-around',
-      overflow: 'hidden',
-      marginTop: '5pt',
-      marginBottom: '5pt'
+        margin: 8,
+        minHeight: '100vh',
     },
-    gridList: {
-      width: '100vw',
-      height: '85vh',
-      justifyContent: 'center'
-    }
 }))

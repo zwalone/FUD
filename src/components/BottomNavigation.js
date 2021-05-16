@@ -24,7 +24,7 @@ export default function BottomNavigationBar({ onChange }) {
 
 const useStyles = makeStyles({
     root: {
-        position: 'absolute',
+        position: 'sticky',
         bottom: 0,
         width: '100%',
         backgroundColor: '#6200EE',

@@ -77,7 +77,11 @@ export default function CustomAppBar({ onSearch }) {
 
 const useStyles = makeStyles((theme) => ({
     // Both variants:
-    root: { },
+    root: {
+        position: 'sticky',
+        top: 0,
+        zIndex: 9999,
+    },
     appBar: { backgroundColor: '#6200EE' },
 
     // AppBar variant:
