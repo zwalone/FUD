@@ -14,7 +14,8 @@ export default function RecipeCard ({ title, subTitle, image, onClick }) {
     const classes = useStyles();
 
     return (
-        <Card className={classes.root} onClick={() => {onClick()}}>
+        <Card className={classes.root} 
+            onClick={() => {onClick()}}>
             <CardActionArea>
                 <CardMedia
                     className={classes.media}
