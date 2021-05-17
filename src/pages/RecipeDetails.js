@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Accordion, Typography, AccordionSummary, AccordionDetails } from '@material-ui/core';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
@@ -7,15 +7,45 @@ import LinkIcon from '@material-ui/icons/Link';
 import Button from '@material-ui/core/Button';
 import AddIcon from '@material-ui/icons/Add';
 import Fab from '@material-ui/core/Fab';
+import FavoriteIcon from '@material-ui/icons/Favorite';
+import DeleteIcon from '@material-ui/icons/Delete';
 import { useHistory } from 'react-router-dom';
+import * as st from '../storage';
 import { RecipeDataContext } from '../data/RecipeDataContext';
 
 export default function RecipeDetails() {
+
+    //returns false if recipe is not found in the favourites dictionary
+    //otherwise true
+    const isFavouriteInit = () => {
+        let fv = st.getItem("favourites");
+        if (fv === null)
+            return false;
+        return fv[currentRecipe.uri] !== undefined;
+    }
+
+    const onFABClick = () => {
+        let fv = st.getItem("favourites");
+        if (fv === null)
+            st.setItem("favourites", {}); //create a new favourites dictionary if one does not exist
+        //use dict to reduce lookup time to O(1)
+        if (fv[currentRecipe.uri] !== undefined) {
+            delete fv[currentRecipe.uri] //if currentRecipe is already in the dictionary
+            setIsFavourite(false);
+            //remove it.
+        }
+        else {
+            fv[currentRecipe.uri] = currentRecipe; //otherwise add it 
+            setIsFavourite(true);
+        }
+        st.setItem("favourites", fv); //update item after modification
+    }
+
     const styles = useStyles();
     const { currentRecipe } = useContext(RecipeDataContext);
-
     const history = useHistory()
     const OnClickClose = () => { history.goBack(); }
+    const [isFavourite, setIsFavourite] = useState(isFavouriteInit());
 
     return (
         <div className={styles.container}>
@@ -24,13 +54,13 @@ export default function RecipeDetails() {
 
             <div className={styles.imageBox}>
                 <div className={styles.details}>
-                    <Button onClick={() => OnClickClose()} className={styles.IconLeft}><CloseIcon/></Button>
-                    <Button className={styles.IconRight}><LinkIcon/></Button>
+                    <Button onClick={() => OnClickClose()} className={styles.IconLeft}><CloseIcon /></Button>
+                    <Button className={styles.IconRight}><LinkIcon /></Button>
                 </div>
-                <img className={styles.image} src={currentRecipe.image} alt="recipe"/>
+                <img className={styles.image} src={currentRecipe.image} alt="recipe" />
             </div>
 
-             {/* {Title} */}
+            {/* {Title} */}
 
             <div className={styles.safeArea}>
                 <Typography className={styles.title}>{currentRecipe.title}</Typography>
@@ -96,8 +126,8 @@ export default function RecipeDetails() {
 
             {/* Add Favorites button */}
 
-            <Fab className={styles.floatingButton}  color="secondary">
-                <AddIcon />
+            <Fab onClick={onFABClick} className={styles.floatingButton} color="secondary">
+                {isFavourite ? <FavoriteIcon /> : <DeleteIcon />}
             </Fab>
         </div>
     )
