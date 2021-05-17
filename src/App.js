@@ -12,6 +12,8 @@ function App() {
       <IngredientListItem checked name="shrimps" amount={23} unit={"pcs"} index={1}/>
       <IngredientListItem checked name="shrimps" amount={23} unit={"pcs"} index={3}/>
       <IngredientListItem checked name="shrimps" amount={23} unit={"pcs"} index={4}/>
+      <CustomAppBar search={(output) => console.log(output)}/>
+      <p>[Empty Page]</p>
     </div>
   );
 }
