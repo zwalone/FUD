@@ -4,30 +4,28 @@
 
 
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import {IconButton, AppBar, Toolbar, Typography, InputBase} from '@material-ui/core'
 import styled from 'styled-components'
-import CheckBox from '@material-ui/core/Checkbox';
+import Checkbox from '@material-ui/core/Checkbox';
 import {SearchIcon, CloseIcon, Height} from '@material-ui/icons'
 
 
-const PurpleCheckBox = styled(CheckBox)`
+const PurpleCheckBox = styled(Checkbox)`
             color: #6200EE !important;
             backgroundColor: #6200EE !important;
 `
 
 
-export function IngredientListItem(props) {
-    const {checkable, checked, name, amount, unit, index} = props
+export function IngredientListItem({checkable,ingredient, setChecked}) {
     const classes = useClasses();
+    
     return(
         <div className={classes.root}>
-            {index ? <div className={classes.separator}/> : <div className={classes.invisibleSeparator}/> }
             <div className={classes.lineKeeper}>
-            <PurpleCheckBox checked={checked} className={classes.checkBox}/>
-            <div className={classes.name}>{name}</div>
-            <div className={classes.amount}>{amount} {unit}</div>
+            {checkable && <PurpleCheckBox  checked={ingredient.checked} onChange={()=> {setChecked(); console.log(ingredient.checked)}} className={classes.checkBox}/>}
+            <div className={classes.name}>{ingredient.name}</div>
             </div>
         </div> 
     )
@@ -66,11 +64,6 @@ const useClasses = makeStyles((theme) => ({
         margin: "12px",
         left: "30px",
 
-    },
-    amount:{
-        position: 'absolute',
-        margin: "12px",
-        right: "5px",
     }
 }));
   

@@ -1,18 +1,22 @@
-import React from 'react';
+import React, {useState} from 'react';
 import './App.css';
 import CustomAppBar from './components/CustomAppBar';
-import {IngredientListItem} from './components/IngredientListItem';
+import {IngredientsList} from './components/IngredientsList'
 
+  const ingredientsMock = [
+  {name: "shrimps", checked: true},
+  {name: "shrimps", checked: false},
+  {name: "shrimps", checked: true}
+]
 
 function App() {
+  const [ingredients, setIngredients] = useState(ingredientsMock)
+
   return (
     <div className="App">
-      <CustomAppBar/>
-      <IngredientListItem checked name="shrimps" amount={23} unit={"pcs"} index={0}/>
-      <IngredientListItem checked name="shrimps" amount={23} unit={"pcs"} index={1}/>
-      <IngredientListItem checked name="shrimps" amount={23} unit={"pcs"} index={3}/>
-      <IngredientListItem checked name="shrimps" amount={23} unit={"pcs"} index={4}/>
-      <CustomAppBar search={(output) => console.log(output)}/>
+      <CustomAppBar search={(output) => console.log(ingredients)}/>
+      <IngredientsList checkable ingredients={ingredients} setIngredients={(ingred) => {setIngredients(ingred); console.log(ingredients)}}/>
+      
       <p>[Empty Page]</p>
     </div>
   );
