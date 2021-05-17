@@ -1,12 +1,17 @@
 import React from 'react';
 import './App.css';
 import CustomAppBar from './components/CustomAppBar';
+import {IngredientListItem} from './components/IngredientListItem';
+
 
 function App() {
   return (
     <div className="App">
       <CustomAppBar/>
-      <p>[Empty Page]</p>
+      <IngredientListItem checked name="shrimps" amount={23} unit={"pcs"} index={0}/>
+      <IngredientListItem checked name="shrimps" amount={23} unit={"pcs"} index={1}/>
+      <IngredientListItem checked name="shrimps" amount={23} unit={"pcs"} index={3}/>
+      <IngredientListItem checked name="shrimps" amount={23} unit={"pcs"} index={4}/>
     </div>
   );
 }
