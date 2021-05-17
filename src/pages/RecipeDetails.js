@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Accordion, Typography, AccordionSummary, AccordionDetails } from '@material-ui/core';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
@@ -8,25 +8,14 @@ import Button from '@material-ui/core/Button';
 import AddIcon from '@material-ui/icons/Add';
 import Fab from '@material-ui/core/Fab';
 import { useHistory } from 'react-router-dom';
+import { RecipeDataContext } from '../data/RecipeDataContext';
 
-//   <RecipeDetails
-//   image={recipe.image}
-//   title={recipe.title}
-//   description={recipe.description}
-//   nutrients={recipe.nutrients}
-//   kcal={recipe.kcal} 
-//   sevings={recipe.sevings}
-// />
-
-export default function RecipeDetails(props) {
-    
+export default function RecipeDetails() {
     const styles = useStyles();
-    const { image, title, description, nutrients, kcal, sevings } = props.location.state.json
+    const { currentRecipe } = useContext(RecipeDataContext);
 
     const history = useHistory()
-    const OnClickClose = () => {
-        history.goBack();
-    }
+    const OnClickClose = () => { history.goBack(); }
 
     return (
         <div className={styles.container}>
@@ -35,19 +24,19 @@ export default function RecipeDetails(props) {
 
             <div className={styles.imageBox}>
                 <div className={styles.details}>
-                    <Button onClick={() => OnClickClose()} className={styles.IconLeft}><CloseIcon /> </Button>
-                    <Button className={styles.IconRight}><LinkIcon /> </Button>
+                    <Button onClick={() => OnClickClose()} className={styles.IconLeft}><CloseIcon/></Button>
+                    <Button className={styles.IconRight}><LinkIcon/></Button>
                 </div>
-                <img className={styles.image} src={image} />
+                <img className={styles.image} src={currentRecipe.image} alt="recipe"/>
             </div>
 
              {/* {Title} */}
 
             <div className={styles.safeArea}>
-                <Typography className={styles.title}>{title}</Typography>
+                <Typography className={styles.title}>{currentRecipe.title}</Typography>
                 <div className={styles.details}>
-                    <Typography className={styles.detailsLeft}>{kcal} kcal</Typography>
-                    <Typography className={styles.detailsRight}>{sevings} sevings</Typography>
+                    <Typography className={styles.detailsLeft}>{currentRecipe.calories}</Typography>
+                    <Typography className={styles.detailsRight}>{currentRecipe.servings}</Typography>
                 </div>
             </div>
 
@@ -77,7 +66,7 @@ export default function RecipeDetails(props) {
                     <Typography>Description</Typography>
                 </AccordionSummary>
                 <AccordionDetails>
-                    <Typography className={styles.description}>{description}</Typography>
+                    <Typography className={styles.description}>{currentRecipe.description}</Typography>
                 </AccordionDetails>
             </Accordion>
 
@@ -92,7 +81,7 @@ export default function RecipeDetails(props) {
                     <Typography>Nutrients Info</Typography>
                 </AccordionSummary>
                 <div className={styles.safeArea}>
-                    {nutrients.map((e, key) => {
+                    {currentRecipe.nutrients.map((e, key) => {
                         return (
                             <AccordionDetails key={key}>
                                 <div className={styles.nutrition}>

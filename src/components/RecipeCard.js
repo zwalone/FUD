@@ -23,7 +23,7 @@ export default function RecipeCard ({ title, subTitle, image, onClick }) {
                     title={title}
                 />
                 <CardContent>
-                    <Typography variant="h6" align="left">
+                    <Typography variant="h6" align="left" noWrap={true}>
                         {title}
                     </Typography>
                     <Typography variant="body2" align="left">

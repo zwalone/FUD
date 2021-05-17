@@ -1,23 +1,21 @@
 import React from 'react';
 import './App.css';
+import { RecipeDataProvider } from './data/RecipeDataContext';
 import { BrowserRouter as Router, Switch , Route} from 'react-router-dom'
-import RecipeDetails from './scenes/RecipeDetails'
+import RecipeDetails from './pages/RecipeDetails'
+import MainPages from './pages/MainPages'
 
-//to delete after change
-import Example from './scenes/example'
-
-function App() {
-
+export default function App() {
   return (
-    <Router>
-      <div className="App">
-        <Switch>
-          <Route path="/" exact component={Example} />
-          <Route path="/recipeDetail" exact component={RecipeDetails}/>
-        </Switch>
-      </div>
-    </Router>
+    <RecipeDataProvider>
+      <Router>
+        <div className="App">
+          <Switch>
+            <Route path="/" exact component={MainPages} />
+            <Route path="/recipeDetails" exact component={RecipeDetails}/>
+          </Switch>
+        </div>
+      </Router>
+    </RecipeDataProvider>
   );
 }
-
-export default App;

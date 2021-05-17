@@ -7,7 +7,7 @@ import SearchIcon from '@material-ui/icons/Search';
 
 export default function BottomNavigationBar({ onChange }) {
     const classes = useStyles();
-    const [value, setValue] = React.useState("favorites");
+    const [value, setValue] = React.useState("search");
 
     const handleChange = (event, newValue) => {
         setValue(newValue)
@@ -16,15 +16,15 @@ export default function BottomNavigationBar({ onChange }) {
 
     return (
         <BottomNavigation value={value} onChange={handleChange} className={classes.root}>
-            <BottomNavigationAction label="Favorites" value="favorites" icon={<FavoriteIcon />} classes={{ label: classes.label, root: classes.button, selected: classes.selected}}/>
             <BottomNavigationAction label="Search" value="search" icon={<SearchIcon />} classes={{ label: classes.label, root: classes.button, selected: classes.selected}} />
+            <BottomNavigationAction label="Favorites" value="favorites" icon={<FavoriteIcon />} classes={{ label: classes.label, root: classes.button, selected: classes.selected}}/>
         </BottomNavigation>
     );
 }
 
 const useStyles = makeStyles({
     root: {
-        position: 'absolute',
+        position: 'sticky',
         bottom: 0,
         width: '100%',
         backgroundColor: '#6200EE',

@@ -3,32 +3,24 @@
 // been implemented on the basis of: https://material-ui.com/components/app-bar/
 
 import React, { useRef, useState } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import { IconButton, AppBar, Toolbar, Typography, InputBase } from '@material-ui/core';
+import { IconButton, AppBar, Toolbar, Typography, InputBase, makeStyles } from '@material-ui/core';
 import SearchIcon from '@material-ui/icons/Search';
 import CloseIcon from '@material-ui/icons/Close';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 
 
-export default function CustomAppBar(props) {
+export default function CustomAppBar({ onSearch }) {
     const styles = useStyles();
-
-    // State responsible for displaying correct view 
-    // - bar with title and button if false OR searchbar if true:
     const [isSearching, setIsSearching] = useState(false);
-
-    // State responsible for displaying "clear button" 
-    // only if there is anything to clear:
     const [canClear, setCanClear] = useState(false);
     
     // Searchbar's value:
     const searchBarInput = useRef("");
 
     // Reacting for clicking search button in search bar:
-    const searchButtonEvent = () => props.search(searchBarInput.current.value);
+    const searchButtonEvent = () => onSearch(searchBarInput.current.value);
     
-    // Rendering:
-    return(
+    return (
         <div className={styles.root}>
             <AppBar position="static" className={styles.appBar}>
             {isSearching 
@@ -85,7 +77,11 @@ export default function CustomAppBar(props) {
 
 const useStyles = makeStyles((theme) => ({
     // Both variants:
-    root: { flexGrow: 1 },
+    root: {
+        position: 'sticky',
+        top: 0,
+        zIndex: 9999,
+    },
     appBar: { backgroundColor: '#6200EE' },
 
     // AppBar variant:
@@ -122,5 +118,6 @@ const useStyles = makeStyles((theme) => ({
         fontSize: 20,
         lineHeight: 24
     }
-  }));
+  })
+);
   
