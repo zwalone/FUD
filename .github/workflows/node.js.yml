@@ -25,6 +25,9 @@ jobs:
       uses: actions/setup-node@v2
       with:
         node-version: ${{ matrix.node-version }}
+      env:
+        REACT_APP_appID: ${{ secrets.edamanappid }}
+        REACT_APP_appKey: ${{ secrets.edamanappkey }}
     - run: npm ci
     - run: npm run build --if-present
     - run: npm test

@@ -1,3 +1,0 @@
-// Copy these two lines to AppKeys.js file and insert there your APP ID and APP KEY.
-export const appID = 'YOUR_APP_ID';    // INSERT YOUR APP ID HERE
-export const appKey = 'YOUR_APP_KEY';  // INSERT YOUR APP KEY HERE
