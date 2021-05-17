@@ -1,3 +1,2 @@
-// Copy these two lines to AppKeys.js file and insert there your APP ID and APP KEY.
-export const appID = process.env.REACT_APP_appID;    // INSERT YOUR APP ID HERE
-export const appKey = process.env.REACT_APP_appKey;  // INSERT YOUR APP KEY HERE
+export const appID = process.env.REACT_APP_appID; //Edamam app ID
+export const appKey = process.env.REACT_APP_appKey;  //Edamam app key
