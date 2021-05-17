@@ -5,15 +5,17 @@ import {IngredientListItem} from "./IngredientListItem"
 export function IngredientsList({ingredients, setIngredients, checkable}) {
 
     const setChecked = (i) =>{
-      let tings = [ ...ingredients ];
       ingredients[i].checked = !ingredients[i].checked;
-      console.log(ingredients)
       setIngredients([...ingredients]);
+    }
+
+    if (!checkable){
+      ingredients = ingredients.map(ingredient => {return {name: ingredient, checked: false}})
     }
     
 
   return (
-    <div>
+    <div style={{width: "100%"}}>
       {ingredients.map((ingredient, i) => (
         <IngredientListItem
           setChecked={() => {

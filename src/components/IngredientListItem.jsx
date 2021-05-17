@@ -21,49 +21,70 @@ const PurpleCheckBox = styled(Checkbox)`
 export function IngredientListItem({checkable,ingredient, setChecked}) {
     const classes = useClasses();
     
-    return(
-        <div className={classes.root}>
-            <div className={classes.lineKeeper}>
-            {checkable && <PurpleCheckBox  checked={ingredient.checked} onChange={()=> {setChecked(); console.log(ingredient.checked)}} className={classes.checkBox}/>}
+    return (
+      <div className={classes.root}>
+        <div className={classes.lineKeeper}>
+          {checkable && (
+            <PurpleCheckBox
+              checked={ingredient.checked}
+              onChange={() => {
+                setChecked();
+                console.log(ingredient.checked);
+              }}
+              className={classes.checkBox}
+            />
+          )}
+          <div className={classes.nameContainer}>
             <div className={classes.name}>{ingredient.name}</div>
-            </div>
-        </div> 
-    )
+          </div>
+        </div>
+      </div>
+    );
 }
 
 
 const useClasses = makeStyles((theme) => ({
-    root:{ 
-        position: "relative"
-    },
-    separator: {
-        height: "1px", 
-        backgroundColor: "#999999",
-        marginLeft: "20px",
-        marginRight: "20px",
-        marginTop: "12px",
-        marginBottom: "0px",
-    },
-    invisibleSeparator: {
-        height: "1px", 
-        marginLeft: "20px",
-        marginRight: "20px",
-        marginTop: "12px",
-        marginBottom: "0px",
-    },
-    lineKeeper:{
-        width: "100%",
-        height: "30px",
-    },
-    checkBox:{
-        position: 'absolute',
-        left: "0px"
-    },
-    name:{
-        position: 'absolute',
-        margin: "12px",
-        left: "30px",
+  root: {
+    position: "relative",
+  },
+  separator: {
+    height: "1px",
+    backgroundColor: "#999999",
+    marginLeft: "20px",
+    marginRight: "20px",
+    marginTop: "12px",
+    marginBottom: "0px",
+  },
+  invisibleSeparator: {
+    height: "1px",
+    marginLeft: "20px",
+    marginRight: "20px",
+    marginTop: "12px",
+    marginBottom: "0px",
+  },
+  lineKeeper: {
+    width: "100%",
+    height: "30px",
+    clear: "left",
+    //textOverflow: "ellipsis",
+    overflow: "hidden",
+    //whiteSpace: "wrap"
+  },
+  checkBox: {
+    //position: "absolute",
+    float: "left",
 
-    }
+    left: "0px",
+  },
+  name: {
+    //width: "100%",
+    float: "left",
+    fontSize: "12px"
+
+  },
+  nameContainer: {
+    margin: "15px",
+    width: "100%"
+  },
 }));
   

@@ -1,25 +1,29 @@
 import React, {useState} from 'react';
 import './App.css';
-import CustomAppBar from './components/CustomAppBar';
-import {IngredientsList} from './components/IngredientsList'
 
-  const ingredientsMock = [
-  {name: "shrimps", checked: true},
-  {name: "shrimps", checked: false},
-  {name: "shrimps", checked: true}
-]
+import { RecipeDataProvider } from './data/RecipeDataContext';
+import { BrowserRouter as Router, Switch , Route} from 'react-router-dom'
+import RecipeDetails from './pages/RecipeDetails'
+import MainPages from './pages/MainPages'
 
-function App() {
-  const [ingredients, setIngredients] = useState(ingredientsMock)
 
+
+
+export default function App() {
+  
   return (
-    <div className="App">
-      <CustomAppBar search={(output) => console.log(ingredients)}/>
-      <IngredientsList checkable ingredients={ingredients} setIngredients={(ingred) => {setIngredients(ingred); console.log(ingredients)}}/>
-      
-      <p>[Empty Page]</p>
-    </div>
+    <RecipeDataProvider>
+      <Router>
+        <div className="App">
+
+          <Switch>
+            <Route path="/" exact component={MainPages} />
+            <Route path="/recipeDetails" exact component={RecipeDetails}/>
+          </Switch>
+        </div>
+      </Router>
+    </RecipeDataProvider>
   );
 }
 
-export default App;
+
