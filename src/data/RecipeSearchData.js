@@ -2,7 +2,7 @@
 // Search API (documentation: https://developer.edamam.com/edamam-docs-recipe-api)
 
 import { prepareCustomJSONs } from './PreparingJSONs';
-import { appKey, appID } from './AppKeys';
+import { appKey, appID } from './Settings';
 
 // List of recipes:
 export const downloadRecipes = (query, from, to) => {
