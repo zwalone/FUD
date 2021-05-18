@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import {
     Accordion,
@@ -24,12 +24,7 @@ export default function RecipeDetails() {
     const { currentRecipe } = useContext(RecipeDataContext);
     const history = useHistory();
     const styles = useStyles();
-    console.log(currentRecipe)
-    if (currentRecipe === null)
-    {
-        history.goBack();
-    }
-        
+
 
     //returns false if recipe is not found in the favourites dictionary
     //otherwise true
@@ -58,13 +53,21 @@ export default function RecipeDetails() {
     }
 
 
-    console.log("asdsasadasd")
+
 
     const [ingredients, setIngredients] = useState(currentRecipe?.ingredients);
     const [isFavourite, setIsFavourite] = useState(isFavouriteInit());
     const OnClickClose = () => {
         history.goBack();
     };
+
+
+    if (currentRecipe === null)
+    {
+        history.push("/");
+        return(<></>);
+    }
+        
 
     return (
         <div className={styles.container}>
