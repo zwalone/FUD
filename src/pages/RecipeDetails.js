@@ -12,17 +12,19 @@ import { RecipeDataContext } from '../data/RecipeDataContext';
 import {IngredientsList} from '../components/IngredientsList'
 
 export default function RecipeDetails() {
-    
+
+    const history = useHistory()
     const styles = useStyles();
     const { currentRecipe } = useContext(RecipeDataContext);
+    if(currentRecipe === null)
+        history.goBack();
+
+
+    
     const [ingredients,setIngredients] = useState(currentRecipe.ingredients)
-    const history = useHistory()
     const OnClickClose = () => { history.goBack(); }
 
-    console.log(currentRecipe)
-
-    if(currentRecipe === null)
-        history.push("/");
+    
 
 
     return (
