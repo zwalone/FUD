@@ -1,21 +1,20 @@
-
 import React from "react";
-import {IngredientListItem} from "./IngredientListItem"
+import { IngredientListItem } from "./IngredientListItem";
 
-export function IngredientsList({ingredients, setIngredients, checkable}) {
+export function IngredientsList({ ingredients, setIngredients, checkable }) {
+  const setChecked = (i) => {
+    ingredients[i].checked = !ingredients[i].checked;
+    setIngredients([...ingredients]);
+  };
 
-    const setChecked = (i) =>{
-      ingredients[i].checked = !ingredients[i].checked;
-      setIngredients([...ingredients]);
-    }
-
-    if (!checkable){
-      ingredients = ingredients.map(ingredient => {return {name: ingredient, checked: false}})
-    }
-    
+  if (!checkable) {
+    ingredients = ingredients.map((ingredient) => {
+      return { name: ingredient, checked: false };
+    });
+  }
 
   return (
-    <div style={{width: "100%"}}>
+    <div style={{ width: "100%" }}>
       {ingredients.map((ingredient, i) => (
         <IngredientListItem
           setChecked={() => {

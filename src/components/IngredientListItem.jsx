@@ -1,9 +1,3 @@
-// Custom App Bar with a "Recipes" title and clickable SearchIcon,
-// which is responsible for showing Search Bar. The component has
-// been implemented on the basis of: https://material-ui.com/components/app-bar/
-
-
-
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import styled from 'styled-components'
@@ -34,7 +28,6 @@ export function IngredientListItem({checkable,ingredient, setChecked}) {
               checked={ingredient.checked}
               onChange={() => {
                 setChecked();
-                console.log(ingredient.checked);
               }}
               className={classes.checkBox}
             />
