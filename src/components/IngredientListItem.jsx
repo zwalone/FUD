@@ -4,12 +4,10 @@
 
 
 
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import {IconButton, AppBar, Toolbar, Typography, InputBase} from '@material-ui/core'
 import styled from 'styled-components'
 import Checkbox from '@material-ui/core/Checkbox';
-import {SearchIcon, CloseIcon, Height} from '@material-ui/icons'
 
 
 const PurpleCheckBox = styled(Checkbox)`
@@ -34,9 +32,9 @@ export function IngredientListItem({checkable,ingredient, setChecked}) {
               className={classes.checkBox}
             />
           )}
-          <div className={classes.nameContainer}>
-            <div className={classes.name}>{ingredient.name}</div>
-          </div>
+            <div className={classes.name}>{ingredient.name.length > 45
+              ? ingredient.name.slice(0, 43) + "..."
+              : ingredient.name}</div>
         </div>
       </div>
     );
@@ -65,26 +63,16 @@ const useClasses = makeStyles((theme) => ({
   lineKeeper: {
     width: "100%",
     height: "30px",
-    clear: "left",
-    //textOverflow: "ellipsis",
-    overflow: "hidden",
-    //whiteSpace: "wrap"
+    clear: "both",
   },
   checkBox: {
-    //position: "absolute",
     float: "left",
-
-    left: "0px",
   },
   name: {
-    //width: "100%",
     float: "left",
-    fontSize: "12px"
-
-  },
-  nameContainer: {
-    margin: "15px",
-    width: "100%"
+    fontSize: "12px",
+    marginTop: "15px",
+    marginBottom: "15px",
   },
 }));
   
