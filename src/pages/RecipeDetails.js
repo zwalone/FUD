@@ -21,13 +21,23 @@ import * as st from '../storage'
 
 export default function RecipeDetails() {
 
+    const { currentRecipe } = useContext(RecipeDataContext);
+    const history = useHistory();
+    const styles = useStyles();
+    console.log(currentRecipe)
+    if (currentRecipe === null)
+    {
+        history.goBack();
+    }
+        
+
     //returns false if recipe is not found in the favourites dictionary
     //otherwise true
     const isFavouriteInit = () => {
         let fv = st.getItem("favourites");
         if (fv === null)
             return false;
-        return fv[currentRecipe.uri] !== undefined;
+        return fv[currentRecipe?.uri] !== undefined;
     }
 
     const onFABClick = () => {
@@ -48,14 +58,8 @@ export default function RecipeDetails() {
     }
 
 
+    console.log("asdsasadasd")
 
-    const history = useHistory();
-    const styles = useStyles();
-    const { currentRecipe } = useContext(RecipeDataContext);
-
-    if (currentRecipe === null) 
-        history.goBack();
-    
     const [ingredients, setIngredients] = useState(currentRecipe?.ingredients);
     const [isFavourite, setIsFavourite] = useState(isFavouriteInit());
     const OnClickClose = () => {
@@ -165,6 +169,7 @@ export default function RecipeDetails() {
             </Fab>
         </div>
     );
+
 }
 
 const useStyles = makeStyles((theme) => ({
