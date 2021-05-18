@@ -16,6 +16,13 @@ const PurpleCheckBox = styled(Checkbox)`
 `
 
 
+const shortenString = (value, maxlen) => {
+  return value.length > maxlen
+    ? value.slice(0, maxlen-2) + "..."
+    : value;
+}
+
+
 export function IngredientListItem({checkable,ingredient, setChecked}) {
     const classes = useClasses();
     
@@ -32,9 +39,7 @@ export function IngredientListItem({checkable,ingredient, setChecked}) {
               className={classes.checkBox}
             />
           )}
-            <div className={classes.name}>{ingredient.name.length > 45
-              ? ingredient.name.slice(0, 43) + "..."
-              : ingredient.name}</div>
+            <div className={classes.name}>{shortenString(ingredient.name, 45)}</div>
         </div>
       </div>
     );

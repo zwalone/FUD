@@ -19,6 +19,8 @@ export default function RecipeDetails() {
     const history = useHistory()
     const OnClickClose = () => { history.goBack(); }
 
+    console.log(currentRecipe)
+
     if(currentRecipe === null)
         history.push("/");
 

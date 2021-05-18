@@ -1,5 +1,5 @@
 
-import React, { useState } from "react";
+import React from "react";
 import {IngredientListItem} from "./IngredientListItem"
 
 export function IngredientsList({ingredients, setIngredients, checkable}) {
