@@ -13,9 +13,12 @@ import { RecipeDataContext } from '../data/RecipeDataContext';
 export default function RecipeDetails() {
     const styles = useStyles();
     const { currentRecipe } = useContext(RecipeDataContext);
-
     const history = useHistory()
     const OnClickClose = () => { history.goBack(); }
+
+    if(currentRecipe === null)
+        history.push("/");
+
 
     return (
         <div className={styles.container}>
@@ -27,16 +30,16 @@ export default function RecipeDetails() {
                     <Button onClick={() => OnClickClose()} className={styles.IconLeft}><CloseIcon/></Button>
                     <Button className={styles.IconRight}><LinkIcon/></Button>
                 </div>
-                <img className={styles.image} src={currentRecipe.image} alt="recipe"/>
+                <img className={styles.image} src={currentRecipe?.image} alt="recipe"/>
             </div>
 
              {/* {Title} */}
 
             <div className={styles.safeArea}>
-                <Typography className={styles.title}>{currentRecipe.title}</Typography>
+                <Typography className={styles.title}>{currentRecipe?.title}</Typography>
                 <div className={styles.details}>
-                    <Typography className={styles.detailsLeft}>{currentRecipe.calories}</Typography>
-                    <Typography className={styles.detailsRight}>{currentRecipe.servings}</Typography>
+                    <Typography className={styles.detailsLeft}>{currentRecipe?.calories}</Typography>
+                    <Typography className={styles.detailsRight}>{currentRecipe?.servings}</Typography>
                 </div>
             </div>
 
@@ -66,7 +69,7 @@ export default function RecipeDetails() {
                     <Typography>Description</Typography>
                 </AccordionSummary>
                 <AccordionDetails>
-                    <Typography className={styles.description}>{currentRecipe.description}</Typography>
+                    <Typography className={styles.description}>{currentRecipe?.description}</Typography>
                 </AccordionDetails>
             </Accordion>
 
@@ -81,7 +84,7 @@ export default function RecipeDetails() {
                     <Typography>Nutrients Info</Typography>
                 </AccordionSummary>
                 <div className={styles.safeArea}>
-                    {currentRecipe.nutrients.map((e, key) => {
+                    {currentRecipe?.nutrients.map((e, key) => {
                         return (
                             <AccordionDetails key={key}>
                                 <div className={styles.nutrition}>
