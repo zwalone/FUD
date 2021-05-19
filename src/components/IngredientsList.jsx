@@ -13,6 +13,8 @@ export function IngredientsList({ ingredients, setIngredients, checkable }) {
     });
   }
 
+  console.log(ingredients)
+
   return (
     <div style={{ width: "100%" }}>
       {ingredients.map((ingredient, i) => (
