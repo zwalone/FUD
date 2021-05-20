@@ -9,7 +9,7 @@ import { RecipeDataContext } from '../data/RecipeDataContext';
 export default function FavoritePage() {
     const classes = useStyles();
     const fv = st.getItem("favourites");
-    const { recipes, setPhrase, setCurrentRecipe } = useContext(RecipeDataContext);
+    const { setCurrentRecipe } = useContext(RecipeDataContext);
     const history = useHistory();
 
     const OnClickItem = (item) => {

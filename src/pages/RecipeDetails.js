@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import {
     Accordion,
@@ -16,7 +16,7 @@ import Fab from "@material-ui/core/Fab";
 import { useHistory } from "react-router-dom";
 import { RecipeDataContext } from "../data/RecipeDataContext";
 import { IngredientsList } from "../components/IngredientsList";
-import * as st from '../storage'
+import * as storage from '../storage'
 
 
 export default function RecipeDetails() {
@@ -29,27 +29,27 @@ export default function RecipeDetails() {
     //returns false if recipe is not found in the favourites dictionary
     //otherwise true
     const isFavouriteInit = () => {
-        let fv = st.getItem("favourites");
-        if (fv === null)
+        let favs = storage.getItem("favourites");
+        if (favs === null)
             return false;
-        return fv[currentRecipe?.uri] !== undefined;
+        return favs[currentRecipe?.uri] !== undefined;
     }
 
     const onFABClick = () => {
-        let fv = st.getItem("favourites");
-        if (fv === null)
-            st.setItem("favourites", {}); //create a new favourites dictionary if one does not exist
+        let favs = storage.getItem("favourites");
+        if (favs === null)
+            storage.setItem("favourites", {}); //create a new favourites dictionary if one does not exist
         //use dict to reduce lookup time to O(1)
-        if (fv[currentRecipe.uri] !== undefined) {
-            delete fv[currentRecipe.uri] //if currentRecipe is already in the dictionary
+        if (favs[currentRecipe.uri] !== undefined) {
+            delete favs[currentRecipe.uri] //if currentRecipe is already in the dictionary
             setIsFavourite(false);
             //remove it.
         }
         else {
-            fv[currentRecipe.uri] = currentRecipe; //otherwise add it 
+            favs[currentRecipe.uri] = currentRecipe; //otherwise add it 
             setIsFavourite(true);
         }
-        st.setItem("favourites", fv); //update item after modification
+        storage.setItem("favourites", favs); //update item after modification
     }
 
 
