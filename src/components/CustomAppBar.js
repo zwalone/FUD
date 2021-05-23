@@ -89,7 +89,7 @@ const useStyles = makeStyles((theme) => ({
         width: '100%', 
         textAlign: 'left', 
         color: 'rgba(255, 255, 255, 0.75)',
-        fontSize: 20,
+        fontSize: "1.25em",
         userSelect: 'none'
     },
     searchButton: { 
@@ -115,8 +115,8 @@ const useStyles = makeStyles((theme) => ({
     },
     searchBarInput: {
         width: '100%',
-        fontSize: 20,
-        lineHeight: 24
+        fontSize: "1.25em",
+        lineHeight: "1.5em"
     }
   })
 );

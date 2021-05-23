@@ -1,10 +1,10 @@
 import React, { useContext, useState } from "react";
-import { makeStyles } from "@material-ui/core/styles";
+import { makeStyles, withStyles } from "@material-ui/core/styles";
 import {
-  Accordion,
+  Accordion as MuiAccordion,
   Typography,
-  AccordionSummary,
-  AccordionDetails,
+  AccordionSummary as MuiAccordionSummary,
+  AccordionDetails as MuiAccordionDetails,
 } from "@material-ui/core";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import CloseIcon from "@material-ui/icons/Close";
@@ -15,6 +15,43 @@ import Fab from "@material-ui/core/Fab";
 import { useHistory } from "react-router-dom";
 import { RecipeDataContext } from "../data/RecipeDataContext";
 import { IngredientsList } from "../components/IngredientsList";
+
+const Accordion = withStyles({
+  root: {
+    '&:before': {
+      backgroundColor: "white",
+    },
+    '&$expanded': {
+      margin: 0,
+    },
+  },
+  expanded: {},
+})(MuiAccordion);
+
+const AccordionSummary = withStyles({
+  root: {
+    minHeight: 0,
+    '&$expanded': {
+      minHeight: 0,
+    },
+  },
+  content: {
+    margin: 0,
+    '&$expanded': {
+      margin: 0,
+    },
+  },
+  expanded: {},
+})(MuiAccordionSummary);
+
+const AccordionDetails = withStyles({
+  root: {
+    paddingRight: "1em",
+    paddingLeft: "1em",
+    paddingTop: 0,
+    paddingBottom: 0,
+  },
+})(MuiAccordionDetails);
 
 export default function RecipeDetails() {
   const history = useHistory();
@@ -32,7 +69,7 @@ export default function RecipeDetails() {
       {/* {Image & icons} */}
 
       <div className={styles.imageBox}>
-        <div className={styles.details}>
+        <div className={styles.icons}>
           <Button onClick={() => OnClickClose()} className={styles.IconLeft}>
             <CloseIcon />
           </Button>
@@ -46,7 +83,7 @@ export default function RecipeDetails() {
       {/* {Title} */}
 
       <div className={styles.safeArea}>
-        <Typography className={styles.title}>{currentRecipe?.title}</Typography>
+        <Typography className={styles.title}>{currentRecipe?.label}</Typography>
         <div className={styles.details}>
           <Typography className={styles.detailsLeft}>
             {currentRecipe?.calories}
@@ -59,20 +96,19 @@ export default function RecipeDetails() {
 
       {/* {Ingredients} */}
 
-      <Accordion>
+      <Accordion elevation={0}>
         <AccordionSummary
           expandIcon={<ExpandMoreIcon />}
           aria-controls="panel1bh-content"
           id="panel1bh-header"
         >
-          <Typography>Ingredients</Typography>
+          <Typography variant="h6">Ingredients</Typography>
         </AccordionSummary>
         <AccordionDetails>
           <IngredientsList
             ingredients={ingredients}
             setIngredients={(ingred) => {
               setIngredients(ingred);
-              console.log(ingredients);
             }}
           />
         </AccordionDetails>
@@ -80,13 +116,13 @@ export default function RecipeDetails() {
 
       {/* {Description} */}
 
-      <Accordion>
+      <Accordion elevation={0}>
         <AccordionSummary
           expandIcon={<ExpandMoreIcon />}
           aria-controls="panel1bh-content"
           id="panel1bh-header"
         >
-          <Typography>Description</Typography>
+          <Typography variant="h6">Description</Typography>
         </AccordionSummary>
         <AccordionDetails>
           <Typography className={styles.description}>
@@ -97,18 +133,18 @@ export default function RecipeDetails() {
 
       {/* {Nutrition} */}
 
-      <Accordion>
+      <Accordion elevation={0}>
         <AccordionSummary
           expandIcon={<ExpandMoreIcon />}
           aria-controls="panel1bh-content"
           id="panel1bh-header"
         >
-          <Typography>Nutrients Info</Typography>
+          <Typography variant="h6">Nutrients Info</Typography>
         </AccordionSummary>
         <div className={styles.safeArea}>
           {currentRecipe?.nutrients.map((e, key) => {
             return (
-              <AccordionDetails key={key}>
+              <AccordionDetails key={key} className={styles.accordionDetails}>
                 <div className={styles.nutrition}>
                   <Typography className={styles.detailsLeft}>
                     {e.label}
@@ -139,9 +175,16 @@ const useStyles = makeStyles((theme) => ({
   imageBox: {
     position: "relative",
     textAlign: "center",
+    height: 192,
+    overflow: "hidden",
   },
   image: {
     width: "100%",
+    transform: "transform(0,-50%)",
+  },
+  icons: {
+    width: "100%",
+    justifyContent: "space-between",
   },
   IconLeft: {
     position: "absolute",
@@ -156,46 +199,49 @@ const useStyles = makeStyles((theme) => ({
     color: "white",
   },
   title: {
-    fontSize: 28,
+    fontSize: "1.75em",
     textAlign: "start",
     fontWeight: "bold",
+    lineHeight: "1.0em",
+    paddingTop: "0.5em",
   },
   safeArea: {
-    paddingLeft: 18,
-    paddingRight: 18,
-    paddingTop: 5,
-    marginBottom: 50,
+    paddingLeft: "1em",
+    paddingRight: "1em",
+    display: "flex",
+    flexDirection: "column",
   },
   details: {
+    paddingTop: "0.5em",
+    paddingBottom: "0.5em",
     width: "100%",
     justifyContent: "space-between",
   },
   nutrition: {
     width: "100%",
     justifyContent: "space-between",
-    marginBottom: -15,
   },
   detailsLeft: {
     float: "left",
     display: "inline",
-    width: "48%",
+    width: "50%",
     textAlign: "start",
-    fontSize: 15,
+    fontSize: "1em",
   },
   detailsRight: {
     float: "right",
     display: "inline",
-    width: "48%",
+    width: "50%",
     textAlign: "end",
-    fontSize: 15,
+    fontSize: "1em",
   },
   description: {
-    fontSize: 15,
+    fontSize: "1em",
     textAlign: "start",
   },
   floatingButton: {
     position: "fixed",
-    bottom: 15,
-    right: 15,
+    bottom: 16,
+    right: 16,
   },
 }));
