@@ -1,4 +1,3 @@
-
 const storage = window.localStorage;
 
 ///Gets an object or string for the given key from localStorage
@@ -28,4 +27,3 @@ export function setItem(key, item) {
 export function removeItem(key) {
     storage.removeItem(key)
 }
-
