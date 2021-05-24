@@ -1,20 +1,18 @@
-import { useContext } from 'react'
 import { makeStyles } from '@material-ui/core/styles';
 import * as st from '../utils/storage';
 import { Grid } from '@material-ui/core';
 import { useHistory } from 'react-router-dom';
 import RecipeCard from '../components/RecipeCard';
-import { RecipeDataContext } from '../data/RecipeDataContext';
 
 export default function FavoritePage() {
     const classes = useStyles();
     const fv = st.getItem("favourites");
-    const { setCurrentRecipe } = useContext(RecipeDataContext);
     const history = useHistory();
 
     const OnClickItem = (item) => {
-        setCurrentRecipe(item);
-        history.push({ pathname: '/recipeDetails' })
+        let parts = item.uri.split('/');
+        let lastSegment = parts.pop() || parts.pop(); //handle trailing slashes
+        history.push({ pathname: '/recipeDetails/' + lastSegment, state: { recipe: item } })
     }
 
     const createRecipeDetails = () => {

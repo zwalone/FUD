@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import {
     Accordion,
@@ -14,16 +14,17 @@ import DeleteIcon from "@material-ui/icons/Delete";
 import FavoriteIcon from "@material-ui/icons/Favorite";
 import Fab from "@material-ui/core/Fab";
 import { useHistory } from "react-router-dom";
-import { RecipeDataContext } from "../data/RecipeDataContext";
 import { IngredientsList } from "../components/IngredientsList";
 import * as storage from '../utils/storage'
 
 
 export default function RecipeDetails() {
 
-    const { currentRecipe } = useContext(RecipeDataContext);
     const history = useHistory();
     const styles = useStyles();
+    const [recipe, setRecipe] = useState(history.location.state.recipe);
+    //TODO: recipe setting effect in case of location state failure
+
 
 
     //returns false if recipe is not found in the favourites dictionary
@@ -32,7 +33,7 @@ export default function RecipeDetails() {
         let favs = storage.getItem("favourites");
         if (favs === null)
             return false;
-        return favs[currentRecipe?.uri] !== undefined;
+        return favs[recipe?.uri] !== undefined;
     }
 
     const onFABClick = () => {
@@ -40,34 +41,31 @@ export default function RecipeDetails() {
         if (favs === null)
             storage.setItem("favourites", {}); //create a new favourites dictionary if one does not exist
         //use dict to reduce lookup time to O(1)
-        if (favs[currentRecipe.uri] !== undefined) {
-            delete favs[currentRecipe.uri] //if currentRecipe is already in the dictionary
+        if (favs[recipe.uri] !== undefined) {
+            delete favs[recipe.uri] //if recipe is already in the dictionary
             setIsFavourite(false);
             //remove it.
         }
         else {
-            favs[currentRecipe.uri] = currentRecipe; //otherwise add it 
+            favs[recipe.uri] = recipe; //otherwise add it 
             setIsFavourite(true);
         }
         storage.setItem("favourites", favs); //update item after modification
     }
 
 
-
-
-    const [ingredients, setIngredients] = useState(currentRecipe?.ingredients);
+    const [ingredients, setIngredients] = useState(recipe?.ingredients);
     const [isFavourite, setIsFavourite] = useState(isFavouriteInit());
     const OnClickClose = () => {
         history.goBack();
     };
 
 
-    if (currentRecipe === null)
-    {
-        history.push("/");
-        return(<></>);
+    if (recipe === null) {
+        history.goBack();
+        return (<></>);
     }
-        
+
 
     return (
         <div className={styles.container}>
@@ -82,19 +80,19 @@ export default function RecipeDetails() {
                         <LinkIcon />
                     </Button>
                 </div>
-                <img className={styles.image} src={currentRecipe?.image} alt="recipe" />
+                <img className={styles.image} src={recipe?.image} alt="recipe" />
             </div>
 
             {/* {Title} */}
 
             <div className={styles.safeArea}>
-                <Typography className={styles.title}>{currentRecipe?.title}</Typography>
+                <Typography className={styles.title}>{recipe?.title}</Typography>
                 <div className={styles.details}>
                     <Typography className={styles.detailsLeft}>
-                        {currentRecipe?.calories}
+                        {recipe?.calories}
                     </Typography>
                     <Typography className={styles.detailsRight}>
-                        {currentRecipe?.servings}
+                        {recipe?.servings}
                     </Typography>
                 </div>
             </div>
@@ -132,7 +130,7 @@ export default function RecipeDetails() {
                 </AccordionSummary>
                 <AccordionDetails>
                     <Typography className={styles.description}>
-                        {currentRecipe?.description}
+                        {recipe?.description}
                     </Typography>
                 </AccordionDetails>
             </Accordion>
@@ -148,7 +146,7 @@ export default function RecipeDetails() {
                     <Typography>Nutrients Info</Typography>
                 </AccordionSummary>
                 <div className={styles.safeArea}>
-                    {currentRecipe?.nutrients.map((e, key) => {
+                    {recipe?.nutrients.map((e, key) => {
                         return (
                             <AccordionDetails key={key}>
                                 <div className={styles.nutrition}>
