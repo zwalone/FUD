@@ -10,11 +10,14 @@ import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import CloseIcon from "@material-ui/icons/Close";
 import LinkIcon from "@material-ui/icons/Link";
 import Button from "@material-ui/core/Button";
-import AddIcon from "@material-ui/icons/Add";
+import DeleteIcon from "@material-ui/icons/Delete";
+import FavoriteIcon from "@material-ui/icons/Favorite";
 import Fab from "@material-ui/core/Fab";
 import { useHistory } from "react-router-dom";
 import { RecipeDataContext } from "../data/RecipeDataContext";
 import { IngredientsList } from "../components/IngredientsList";
+import * as storage from '../utils/storage'
+
 
 const Accordion = withStyles({
   root: {
@@ -57,9 +60,41 @@ export default function RecipeDetails() {
   const history = useHistory();
   const styles = useStyles();
   const { currentRecipe } = useContext(RecipeDataContext);
-  if (currentRecipe === null) history.goBack();
 
+  //returns false if recipe is not found in the favourites dictionary
+  //otherwise true
+  const isFavouriteInit = () => {
+    let favs = storage.getItem("favourites");
+    if (favs === null)
+        return false;
+    return favs[currentRecipe?.uri] !== undefined;
+  }
+
+  const [isFavourite, setIsFavourite] = useState(isFavouriteInit());
   const [ingredients, setIngredients] = useState(currentRecipe.ingredients);
+
+  const onFABClick = () => {
+    let favs = storage.getItem("favourites");
+    if (favs === null)
+        storage.setItem("favourites", {}); //create a new favourites dictionary if one does not exist
+    //use dict to reduce lookup time to O(1)
+    if (favs[currentRecipe.uri] !== undefined) {
+        delete favs[currentRecipe.uri] //if currentRecipe is already in the dictionary
+        setIsFavourite(false);
+        //remove it.
+    }
+    else {
+        favs[currentRecipe.uri] = currentRecipe; //otherwise add it 
+        setIsFavourite(true);
+    }
+    storage.setItem("favourites", favs); //update item after modification
+  }
+
+  if (currentRecipe === null) {
+      history.push("/");
+      return(<></>);
+  }
+  
   const OnClickClose = () => {
     history.goBack();
   };
@@ -93,6 +128,7 @@ export default function RecipeDetails() {
           </Typography>
         </div>
       </div>
+
 
       {/* {Ingredients} */}
 
@@ -131,8 +167,6 @@ export default function RecipeDetails() {
         </AccordionDetails>
       </Accordion>
 
-      {/* {Nutrition} */}
-
       <Accordion elevation={0}>
         <AccordionSummary
           expandIcon={<ExpandMoreIcon />}
@@ -161,8 +195,8 @@ export default function RecipeDetails() {
 
       {/* Add Favorites button */}
 
-      <Fab className={styles.floatingButton} color="secondary">
-        <AddIcon />
+      <Fab onClick={onFABClick} className={styles.floatingButton} color="secondary">
+          {isFavourite ? <DeleteIcon /> : <FavoriteIcon />}
       </Fab>
     </div>
   );
