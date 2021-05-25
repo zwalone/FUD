@@ -38,7 +38,6 @@ export default function RecipeCard ({ title, subTitle, image, onClick }) {
 const useStyles = makeStyles({
     root: {
         maxWidth: 345,
-        minWidth: 192,
         height: 'fit-content'
     },
     media: {

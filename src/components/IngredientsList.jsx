@@ -23,6 +23,7 @@ export function IngredientsList({ ingredients, setIngredients, checkable }) {
           }}
           checkable={checkable}
           ingredient={ingredient}
+          key={i}
         />
       ))}
     </div>
