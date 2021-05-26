@@ -129,7 +129,6 @@ export default function RecipeDetails() {
         </div>
       </div>
 
-
       {/* {Ingredients} */}
 
       <Accordion elevation={0}>
@@ -150,22 +149,7 @@ export default function RecipeDetails() {
         </AccordionDetails>
       </Accordion>
 
-      {/* {Description} */}
-
-      <Accordion elevation={0}>
-        <AccordionSummary
-          expandIcon={<ExpandMoreIcon />}
-          aria-controls="panel1bh-content"
-          id="panel1bh-header"
-        >
-          <Typography variant="h6">Description</Typography>
-        </AccordionSummary>
-        <AccordionDetails>
-          <Typography className={styles.description}>
-            {currentRecipe?.description}
-          </Typography>
-        </AccordionDetails>
-      </Accordion>
+      {/* {Nutrients} */}
 
       <Accordion elevation={0}>
         <AccordionSummary
@@ -205,16 +189,22 @@ export default function RecipeDetails() {
 const useStyles = makeStyles((theme) => ({
   container: {
     marginBottom: 50,
+    overflowX: "hidden",
   },
   imageBox: {
     position: "relative",
-    textAlign: "center",
     height: 192,
     overflow: "hidden",
   },
   image: {
     width: "100%",
-    transform: "transform(0,-50%)",
+    position: "absolute",
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0,
+    margin: "auto",
+    zIndex: -1,
   },
   icons: {
     width: "100%",
@@ -223,13 +213,13 @@ const useStyles = makeStyles((theme) => ({
   IconLeft: {
     position: "absolute",
     top: 8,
-    left: 16,
+    left: 0,
     color: "white",
   },
   IconRight: {
     position: "absolute",
     top: 8,
-    right: 16,
+    right: 0,
     color: "white",
   },
   title: {

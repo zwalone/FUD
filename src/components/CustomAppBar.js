@@ -9,7 +9,7 @@ import CloseIcon from '@material-ui/icons/Close';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 
 
-export default function CustomAppBar({ onSearch }) {
+export default function CustomAppBar({ onSearch, canSearch }) {
     const styles = useStyles();
     const [isSearching, setIsSearching] = useState(false);
     const [canClear, setCanClear] = useState(false);
@@ -63,10 +63,12 @@ export default function CustomAppBar({ onSearch }) {
             :
             <Toolbar> {/* Title + button */}
                 <Typography className={styles.title}>Recipes</Typography>
+                {canSearch &&
                 <IconButton className={styles.searchButton} 
                             onClick={() => { setIsSearching(true); }}>
                     <SearchIcon/>
                 </IconButton>
+                }
             </Toolbar>
             }
             </AppBar>

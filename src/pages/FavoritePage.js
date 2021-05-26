@@ -5,6 +5,7 @@ import { Grid } from '@material-ui/core';
 import { useHistory } from 'react-router-dom';
 import RecipeCard from '../components/RecipeCard';
 import { RecipeDataContext } from '../data/RecipeDataContext';
+import CustomAppBar from '../components/CustomAppBar';
 
 export default function FavoritePage() {
     const classes = useStyles();
@@ -38,6 +39,7 @@ export default function FavoritePage() {
 
     return (
         <>
+            <CustomAppBar canSearch={false}/>
             <div className={classes.root}>
                 <Grid container spacing={1} justify='center'>
                     {createRecipeDetails()}
