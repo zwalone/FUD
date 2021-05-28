@@ -6,19 +6,28 @@ import { downloadRecipes } from '../data/RecipeSearchData';
 import { Grid } from '@material-ui/core';
 import { useHistory } from 'react-router-dom';
 
+//Global state for search page
+var lastFetchCache = [];
+
 export default function SearchPage() {
     const classes = useStyles();
     const history = useHistory();
-    const [recipes, setRecipes] = useState([]);
+    const [recipes, setRecipes] = useState(lastFetchCache);
     const [phrase, setPhrase] = useState(history.location.pathname.replace(/\//g, "")); //TODO: use query string
 
     //Fetch new data, when phrase changes
     useEffect(() => {
-        downloadRecipes(phrase.length === 0 ? "shrimp" : phrase, 0, 100)
-            .then(recipes => {
-                if (recipes === undefined) console.log("Failed to fetch (wrong keys?)");
-                else setRecipes(recipes);
-            })
+        if (recipes.length === 0) {
+            downloadRecipes(phrase.length === 0 ? "shrimp" : phrase, 0, 100)
+                .then(recipes => {
+                    if (recipes === undefined) console.log("Failed to fetch (wrong keys?)");
+                    else 
+                    {
+                        setRecipes(recipes);
+                        lastFetchCache = recipes;
+                    }
+                })
+        }
     }, [phrase]);
 
 

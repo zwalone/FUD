@@ -17,7 +17,6 @@ import { useHistory } from "react-router-dom";
 import { IngredientsList } from "../components/IngredientsList";
 import * as storage from '../utils/storage'
 
-
 export default function RecipeDetails() {
 
     const history = useHistory();
