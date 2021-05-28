@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect, useState } from 'react';
+import React, { Fragment, useEffect, useState, useRef } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import RecipeCard from '../components/RecipeCard';
 import CustomAppBar from '../components/CustomAppBar';
@@ -15,19 +15,36 @@ export default function SearchPage() {
     const [recipes, setRecipes] = useState(lastFetchCache);
     const [phrase, setPhrase] = useState(history.location.pathname.replace(/\//g, "")); //TODO: use query string
 
+
+    const fetchRecipes = () => {
+        downloadRecipes(phrase.length === 0 ? "shrimp" : phrase, 0, 100)
+            .then(recipes => {
+                if (recipes === undefined) console.log("Failed to fetch (wrong keys?)");
+                else {
+                    setRecipes(recipes);
+                    lastFetchCache = recipes;
+                }
+            })
+    }
+
+    useEffect(() => {
+        if (recipes.length === 0)
+            fetchRecipes();
+    }, []);
+
+
+    const isMounted = useRef(false);
     //Fetch new data, when phrase changes
     useEffect(() => {
-        if (recipes.length === 0) {
-            downloadRecipes(phrase.length === 0 ? "shrimp" : phrase, 0, 100)
-                .then(recipes => {
-                    if (recipes === undefined) console.log("Failed to fetch (wrong keys?)");
-                    else 
-                    {
-                        setRecipes(recipes);
-                        lastFetchCache = recipes;
-                    }
-                })
+
+
+        if (isMounted.current === true) {
+            fetchRecipes();
         }
+        else {
+            isMounted.current = true;
+        }
+
     }, [phrase]);
 
 
