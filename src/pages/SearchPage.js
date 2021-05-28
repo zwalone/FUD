@@ -5,6 +5,7 @@ import CustomAppBar from '../components/CustomAppBar';
 import { downloadRecipes } from '../data/RecipeSearchData';
 import { Grid } from '@material-ui/core';
 import { useHistory } from 'react-router-dom';
+import {getSegment} from '../utils/urlUtils'
 
 //Global state for search page
 var lastFetchCache = [];
@@ -13,11 +14,10 @@ export default function SearchPage() {
     const classes = useStyles();
     const history = useHistory();
     const [recipes, setRecipes] = useState(lastFetchCache);
-    const [phrase, setPhrase] = useState(history.location.pathname.replace(/\//g, "")); //TODO: use query string
-
+    const [phrase, setPhrase] = useState(getSegment(2)); //TODO: use query string
 
     const fetchRecipes = () => {
-        downloadRecipes(phrase.length === 0 ? "shrimp" : phrase, 0, 100)
+        downloadRecipes(phrase?.length === 0 ? "shrimp" : phrase, 0, 100)
             .then(recipes => {
                 if (recipes === undefined) console.log("Failed to fetch (wrong keys?)");
                 else {
@@ -48,7 +48,7 @@ export default function SearchPage() {
 
 
     const OnSearchClick = (input) => {
-        history.replace({ pathname: '/' + input });
+        history.replace({ pathname: '/search/' + input });
         setPhrase(input);
     }
 

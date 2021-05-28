@@ -2,15 +2,15 @@ import React, { Fragment, useState } from 'react';
 import BottomNavigationBar from '../components/BottomNavigation';
 import FavoritePage from './FavoritePage';
 import SearchPage from './SearchPage';
+import {getSegment} from '../utils/urlUtils'
 
 export default function MainPages () {
-    const pathname = window.location.pathname;
-    const [value, setValue] = useState(pathname);
+    const pathname = getSegment(1);
 
     return (
         <Fragment>
-            { value === "/search" ? <SearchPage/> : <FavoritePage/> }
-            <BottomNavigationBar onChange={(_, newValue) => setValue(newValue)} pathname={pathname}/>
+            { pathname === "favorites" ? <FavoritePage/> : <SearchPage/> }
+            <BottomNavigationBar onChange={() => {}} pathname={pathname}/>
         </Fragment>
     )
 }
