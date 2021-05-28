@@ -4,12 +4,13 @@ import FavoritePage from './FavoritePage';
 import SearchPage from './SearchPage';
 
 export default function MainPages () {
-    const [value, setValue] = useState("search");
+    const pathname = window.location.pathname;
+    const [value, setValue] = useState(pathname);
 
     return (
         <Fragment>
-            { value === "search" ? <SearchPage/> : <FavoritePage/> }
-            <BottomNavigationBar onChange={(_, newValue) => setValue(newValue)}/>
+            { value === "/search" ? <SearchPage/> : <FavoritePage/> }
+            <BottomNavigationBar onChange={(_, newValue) => setValue(newValue)} pathname={pathname}/>
         </Fragment>
     )
 }

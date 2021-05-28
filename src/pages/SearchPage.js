@@ -27,24 +27,23 @@ export default function SearchPage() {
             })
     }
 
+    //Fetch data on mount, only if cache does not contain anything
     useEffect(() => {
         if (recipes.length === 0)
             fetchRecipes();
     }, []);
 
 
+    //Prevent the following effect, from running on mount
     const isMounted = useRef(false);
     //Fetch new data, when phrase changes
     useEffect(() => {
-
-
         if (isMounted.current === true) {
             fetchRecipes();
         }
         else {
             isMounted.current = true;
         }
-
     }, [phrase]);
 
 
