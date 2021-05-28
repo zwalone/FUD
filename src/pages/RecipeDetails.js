@@ -108,7 +108,7 @@ export default function RecipeDetails() {
           <Button onClick={() => OnClickClose()} className={styles.IconLeft}>
             <CloseIcon />
           </Button>
-          <Button className={styles.IconRight}>
+          <Button href={`${currentRecipe.url}`}  className={styles.IconRight}>
             <LinkIcon />
           </Button>
         </div>
