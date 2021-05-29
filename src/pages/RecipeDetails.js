@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import {
     Accordion,
@@ -23,8 +23,6 @@ export default function RecipeDetails() {
     const styles = useStyles();
     const [recipe, setRecipe] = useState(history.location.state.recipe);
     //TODO: recipe setting effect in case of location state failure
-
-
 
     //returns false if recipe is not found in the favourites dictionary
     //otherwise true
