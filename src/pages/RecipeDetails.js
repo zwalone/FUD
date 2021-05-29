@@ -83,7 +83,7 @@ export default function RecipeDetails() {
                 setRecipe(x)
             });
         }
-    }, [])
+    }, [recipe])
 
 
     const onFABClick = () => {
@@ -173,7 +173,7 @@ export default function RecipeDetails() {
                     <Typography variant="h6">Ingredients</Typography>
                 </AccordionSummary>
                 <AccordionDetails>
-                    {(recipe?.ingredients != undefined) ? <IngredientsList
+                    {(recipe?.ingredients !== undefined) ? <IngredientsList
                         ingredients={ingredients}
                         setIngredients={(ingred) => {
                             setIngredients(ingred);

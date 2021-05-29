@@ -33,9 +33,11 @@ export default function SearchPage() {
     }
 
     //Fetch data on mount, only if cache does not contain anything
+    // eslint-disable-next-line
     useEffect(() => {
         if (recipes.length === 0)
             fetchRecipes();
+        // eslint-disable-next-line
     }, []);
 
     //Prevent the following effect, from running on mount
@@ -48,6 +50,7 @@ export default function SearchPage() {
         else {
             isMounted.current = true;
         }
+        // eslint-disable-next-line
     }, [phrase]);
 
     const OnSearchClick = (input) => {
@@ -61,7 +64,7 @@ export default function SearchPage() {
 
     return (
         <Fragment>
-            <CustomAppBar canSearch={true} onSearch={input => setPhrase(input)} />
+            <CustomAppBar canSearch={true} onSearch={input => OnSearchClick(input)} />
             <div className={classes.root}>
                 <Grid container spacing={1} justify='center'>
                     {recipes.map(recipe =>
