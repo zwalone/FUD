@@ -5,7 +5,7 @@ import CustomAppBar from '../components/CustomAppBar';
 import { downloadRecipes } from '../data/RecipeSearchData';
 import { Grid } from '@material-ui/core';
 import { useHistory } from 'react-router-dom';
-import { getSegment } from '../utils/urlUtils';
+import { getPathnameSegment } from '../utils/urlUtils';
 
 //Global state for search page
 var lastFetchCache = [];
@@ -14,7 +14,7 @@ export default function SearchPage() {
     const classes = useStyles();
     const history = useHistory();
     const [recipes, setRecipes] = useState(lastFetchCache);
-    const [phrase, setPhrase] = useState(getSegment(2)); //TODO: use query string
+    const [phrase, setPhrase] = useState(getPathnameSegment(2)); //TODO: use query string
 
     const fetchRecipes = () => {
         let p = phrase
