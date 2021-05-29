@@ -2,7 +2,7 @@ import React, { Fragment, useEffect, useState, useRef } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import RecipeCard from '../components/RecipeCard';
 import CustomAppBar from '../components/CustomAppBar';
-import { downloadRecipes } from '../data/RecipeSearchData';
+import { downloadRecipesQuery } from '../data/RecipeSearchData';
 import { Grid } from '@material-ui/core';
 import { useHistory } from 'react-router-dom';
 import { getPathnameSegment } from '../utils/urlUtils';
@@ -22,7 +22,7 @@ export default function SearchPage() {
             p = "shrimp"
         }
 
-        downloadRecipes(p, 0, 100)
+        downloadRecipesQuery(p, 0, 100)
             .then(recipes => {
                 if (recipes === undefined) console.log("Failed to fetch (wrong keys?)");
                 else {
@@ -56,14 +56,12 @@ export default function SearchPage() {
     }
 
     const OnClickItem = (item) => {
-        let parts = item.uri.split('/');
-        let lastSegment = parts.pop() || parts.pop(); //handle trailing slashes
-        history.push({ pathname: '/recipeDetails/' + lastSegment, state: { recipe: item } })
+        history.push({ pathname: '/recipeDetails/' + escape(item.uri), state: { recipe: item } })
     }
 
     return (
         <Fragment>
-            <CustomAppBar canSearch={true} onSearch={input => setPhrase(input)}/>
+            <CustomAppBar canSearch={true} onSearch={input => setPhrase(input)} />
             <div className={classes.root}>
                 <Grid container spacing={1} justify='center'>
                     {recipes.map(recipe =>

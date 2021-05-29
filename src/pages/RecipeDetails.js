@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { makeStyles, withStyles } from "@material-ui/core/styles";
 import {
     Accordion as MuiAccordion,
@@ -16,7 +16,7 @@ import Fab from "@material-ui/core/Fab";
 import { useHistory } from "react-router-dom";
 import { IngredientsList } from "../components/IngredientsList";
 import * as storage from '../utils/storage'
-
+import { downloadRecipeByID } from "../data/RecipeSearchData"
 
 const Accordion = withStyles({
     root: {
@@ -55,22 +55,36 @@ const AccordionDetails = withStyles({
     },
 })(MuiAccordionDetails);
 
+
+//returns false if recipe is not found in the favourites dictionary
+//otherwise true
+const isFavouriteInit = (recipe) => {
+    let favs = storage.getItem("favourites");
+    if (favs === null)
+        return false;
+    return favs[recipe?.uri] !== undefined;
+}
+
 export default function RecipeDetails() {
-
-
     const history = useHistory();
     const styles = useStyles();
-    const [recipe] = useState(history?.location?.state?.recipe);
-    //TODO: recipe setting effect in case of location state failure
+    const [recipe, setRecipe] = useState(history?.location?.state?.recipe);
+    const [ingredients, setIngredients] = useState(recipe?.ingredients);
+    const [isFavourite, setIsFavourite] = useState(isFavouriteInit(recipe));
 
-    //returns false if recipe is not found in the favourites dictionary
-    //otherwise true
-    const isFavouriteInit = () => {
-        let favs = storage.getItem("favourites");
-        if (favs === null)
-            return false;
-        return favs[recipe?.uri] !== undefined;
-    }
+
+
+    useEffect(() => {
+        if (recipe === undefined) {
+            //fetch recipe using URL
+            let n = window.location.href.search("recipeDetails") + "recipeDetails".length + 1;
+            let uri = window.location.href.slice(n);
+            downloadRecipeByID(uri).then(x => {
+                setRecipe(x)
+            });
+        }
+    }, [])
+
 
     const onFABClick = () => {
         let favs = storage.getItem("favourites");
@@ -89,20 +103,15 @@ export default function RecipeDetails() {
         storage.setItem("favourites", favs); //update item after modification
     }
 
-
-    const [ingredients, setIngredients] = useState(recipe?.ingredients);
-    const [isFavourite, setIsFavourite] = useState(isFavouriteInit());
     const OnClickClose = () => {
         history.goBack();
     };
 
 
-    if (recipe === null) {
-        history.goBack();
+    if (recipe === null || recipe === undefined) {
         return (<></>);
     }
-
-
+    console.log(recipe)
     return (
         <div className={styles.container}>
             {/* {Image & icons} */}
@@ -164,12 +173,13 @@ export default function RecipeDetails() {
                     <Typography variant="h6">Ingredients</Typography>
                 </AccordionSummary>
                 <AccordionDetails>
-                    <IngredientsList
+                    {(recipe?.ingredients != undefined) ? <IngredientsList
                         ingredients={ingredients}
                         setIngredients={(ingred) => {
                             setIngredients(ingred);
                         }}
-                    />
+                    /> : null}
+
                 </AccordionDetails>
             </Accordion>
 
@@ -185,7 +195,7 @@ export default function RecipeDetails() {
                     <Typography variant="h6">Nutrients Info</Typography>
                 </AccordionSummary>
                 <div className={styles.safeArea}>
-                    {recipe?.nutrients.map((e, key) => {
+                    {recipe?.nutrients?.map((e, key) => {
                         return (
                             <AccordionDetails key={key} className={styles.accordionDetails}>
                                 <div className={styles.nutrition}>
