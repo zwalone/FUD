@@ -63,7 +63,7 @@ export default function SearchPage() {
 
     return (
         <Fragment>
-            <CustomAppBar onSearch={input => OnSearchClick(input)} />
+            <CustomAppBar canSearch={true} onSearch={input => setPhrase(input)}/>
             <div className={classes.root}>
                 <Grid container spacing={1} justify='center'>
                     {recipes.map(recipe =>

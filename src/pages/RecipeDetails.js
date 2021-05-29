@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import { makeStyles } from "@material-ui/core/styles";
+import { makeStyles, withStyles } from "@material-ui/core/styles";
 import {
-    Accordion,
+    Accordion as MuiAccordion,
     Typography,
-    AccordionSummary,
-    AccordionDetails,
+    AccordionSummary as MuiAccordionSummary,
+    AccordionDetails as MuiAccordionDetails,
 } from "@material-ui/core";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import CloseIcon from "@material-ui/icons/Close";
@@ -17,11 +17,50 @@ import { useHistory } from "react-router-dom";
 import { IngredientsList } from "../components/IngredientsList";
 import * as storage from '../utils/storage'
 
+
+const Accordion = withStyles({
+    root: {
+        '&:before': {
+            backgroundColor: "white",
+        },
+        '&$expanded': {
+            margin: 0,
+        },
+    },
+    expanded: {},
+})(MuiAccordion);
+
+const AccordionSummary = withStyles({
+    root: {
+        minHeight: 0,
+        '&$expanded': {
+            minHeight: 0,
+        },
+    },
+    content: {
+        margin: 0,
+        '&$expanded': {
+            margin: 0,
+        },
+    },
+    expanded: {},
+})(MuiAccordionSummary);
+
+const AccordionDetails = withStyles({
+    root: {
+        paddingRight: "1em",
+        paddingLeft: "1em",
+        paddingTop: 0,
+        paddingBottom: 0,
+    },
+})(MuiAccordionDetails);
+
 export default function RecipeDetails() {
+
 
     const history = useHistory();
     const styles = useStyles();
-    const [recipe] = useState(history.location.state.recipe);
+    const [recipe] = useState(history?.location?.state?.recipe);
     //TODO: recipe setting effect in case of location state failure
 
     //returns false if recipe is not found in the favourites dictionary
@@ -69,11 +108,11 @@ export default function RecipeDetails() {
             {/* {Image & icons} */}
 
             <div className={styles.imageBox}>
-                <div className={styles.details}>
+                <div className={styles.icons}>
                     <Button onClick={() => OnClickClose()} className={styles.IconLeft}>
                         <CloseIcon />
                     </Button>
-                    <Button className={styles.IconRight}>
+                    <Button href={`${recipe?.url}`} className={styles.IconRight}>
                         <LinkIcon />
                     </Button>
                 </div>
@@ -83,7 +122,7 @@ export default function RecipeDetails() {
             {/* {Title} */}
 
             <div className={styles.safeArea}>
-                <Typography className={styles.title}>{recipe?.title}</Typography>
+                <Typography className={styles.title}>{recipe?.label}</Typography>
                 <div className={styles.details}>
                     <Typography className={styles.detailsLeft}>
                         {recipe?.calories}
@@ -94,26 +133,6 @@ export default function RecipeDetails() {
                 </div>
             </div>
 
-            {/* {Ingredients} */}
-
-            <Accordion>
-                <AccordionSummary
-                    expandIcon={<ExpandMoreIcon />}
-                    aria-controls="panel1bh-content"
-                    id="panel1bh-header"
-                >
-                    <Typography>Ingredients</Typography>
-                </AccordionSummary>
-                <AccordionDetails>
-                    <IngredientsList
-                        ingredients={ingredients}
-                        setIngredients={(ingred) => {
-                            setIngredients(ingred);
-                            console.log(ingredients);
-                        }}
-                    />
-                </AccordionDetails>
-            </Accordion>
 
             {/* {Description} */}
 
@@ -132,20 +151,43 @@ export default function RecipeDetails() {
                 </AccordionDetails>
             </Accordion>
 
-            {/* {Nutrition} */}
 
-            <Accordion>
+
+            {/* {Ingredients} */}
+
+            <Accordion elevation={0}>
                 <AccordionSummary
                     expandIcon={<ExpandMoreIcon />}
                     aria-controls="panel1bh-content"
                     id="panel1bh-header"
                 >
-                    <Typography>Nutrients Info</Typography>
+                    <Typography variant="h6">Ingredients</Typography>
+                </AccordionSummary>
+                <AccordionDetails>
+                    <IngredientsList
+                        ingredients={ingredients}
+                        setIngredients={(ingred) => {
+                            setIngredients(ingred);
+                        }}
+                    />
+                </AccordionDetails>
+            </Accordion>
+
+
+            {/* {Nutrients} */}
+
+            <Accordion elevation={0}>
+                <AccordionSummary
+                    expandIcon={<ExpandMoreIcon />}
+                    aria-controls="panel1bh-content"
+                    id="panel1bh-header"
+                >
+                    <Typography variant="h6">Nutrients Info</Typography>
                 </AccordionSummary>
                 <div className={styles.safeArea}>
                     {recipe?.nutrients.map((e, key) => {
                         return (
-                            <AccordionDetails key={key}>
+                            <AccordionDetails key={key} className={styles.accordionDetails}>
                                 <div className={styles.nutrition}>
                                     <Typography className={styles.detailsLeft}>
                                         {e.label}
@@ -167,73 +209,88 @@ export default function RecipeDetails() {
             </Fab>
         </div>
     );
-
 }
 
 const useStyles = makeStyles((theme) => ({
     container: {
         marginBottom: 50,
+        overflowX: "hidden",
     },
     imageBox: {
         position: "relative",
-        textAlign: "center",
+        height: 192,
+        overflow: "hidden",
     },
     image: {
         width: "100%",
+        position: "absolute",
+        top: 0,
+        bottom: 0,
+        left: 0,
+        right: 0,
+        margin: "auto",
+        zIndex: -1,
+    },
+    icons: {
+        width: "100%",
+        justifyContent: "space-between",
     },
     IconLeft: {
         position: "absolute",
         top: 8,
-        left: 16,
+        left: 0,
         color: "white",
     },
     IconRight: {
         position: "absolute",
         top: 8,
-        right: 16,
+        right: 0,
         color: "white",
     },
     title: {
-        fontSize: 28,
+        fontSize: "1.75em",
         textAlign: "start",
         fontWeight: "bold",
+        lineHeight: "1.0em",
+        paddingTop: "0.5em",
     },
     safeArea: {
-        paddingLeft: 18,
-        paddingRight: 18,
-        paddingTop: 5,
-        marginBottom: 50,
+        paddingLeft: "1em",
+        paddingRight: "1em",
+        display: "flex",
+        flexDirection: "column",
     },
     details: {
+        paddingTop: "0.5em",
+        paddingBottom: "0.5em",
         width: "100%",
         justifyContent: "space-between",
     },
     nutrition: {
         width: "100%",
         justifyContent: "space-between",
-        marginBottom: -15,
     },
     detailsLeft: {
         float: "left",
         display: "inline",
-        width: "48%",
+        width: "50%",
         textAlign: "start",
-        fontSize: 15,
+        fontSize: "1em",
     },
     detailsRight: {
         float: "right",
         display: "inline",
-        width: "48%",
+        width: "50%",
         textAlign: "end",
-        fontSize: 15,
+        fontSize: "1em",
     },
     description: {
-        fontSize: 15,
+        fontSize: "1em",
         textAlign: "start",
     },
     floatingButton: {
         position: "fixed",
-        bottom: 15,
-        right: 15,
+        bottom: 16,
+        right: 16,
     },
 }));
