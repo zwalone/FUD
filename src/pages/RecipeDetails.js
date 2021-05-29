@@ -104,7 +104,7 @@ export default function RecipeDetails() {
     }
 
     const OnClickClose = () => {
-        history.goBack();
+        history.goBack(); //TODO: handle going back in invalid state
     };
 
 
