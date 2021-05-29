@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import BottomNavigation from '@material-ui/core/BottomNavigation';
 import BottomNavigationAction from '@material-ui/core/BottomNavigationAction';
@@ -17,9 +17,15 @@ export default function BottomNavigationBar({ pathname }) {
         setValue(newValue)
     };
 
+    //Fix for root pathname
+    useEffect(() => {
+        if (pathname === "")
+            setValue("search"); //force component rerender
+    }, [])
+
     return (
         <BottomNavigation value={value} onChange={handleChange} className={classes.root}>
-            <BottomNavigationAction component={Link} to={"/"} label="Search" value="" icon={<SearchIcon />} classes={{ label: classes.label, root: classes.button, selected: classes.selected }} />
+            <BottomNavigationAction component={Link} to={"/search"} label="Search" value="search" icon={<SearchIcon />} classes={{ label: classes.label, root: classes.button, selected: classes.selected }} />
             <BottomNavigationAction component={Link} to={"/favorites"} label="Favorites" value="favorites" icon={<FavoriteIcon />} classes={{ label: classes.label, root: classes.button, selected: classes.selected }} />
         </BottomNavigation>
     );
