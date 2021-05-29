@@ -143,24 +143,6 @@ export default function RecipeDetails() {
             </div>
 
 
-            {/* {Description} */}
-
-            <Accordion>
-                <AccordionSummary
-                    expandIcon={<ExpandMoreIcon />}
-                    aria-controls="panel1bh-content"
-                    id="panel1bh-header"
-                >
-                    <Typography>Description</Typography>
-                </AccordionSummary>
-                <AccordionDetails>
-                    <Typography className={styles.description}>
-                        {recipe?.description}
-                    </Typography>
-                </AccordionDetails>
-            </Accordion>
-
-
 
             {/* {Ingredients} */}
 
