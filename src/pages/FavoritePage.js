@@ -1,31 +1,29 @@
 import { makeStyles } from '@material-ui/core/styles';
-import * as st from '../utils/storage';
+import * as storage from '../utils/storage';
 import { Grid } from '@material-ui/core';
 import { useHistory } from 'react-router-dom';
 import RecipeCard from '../components/RecipeCard';
 import CustomAppBar from '../components/CustomAppBar';
 
-
 export default function FavoritePage() {
     const classes = useStyles();
-    const fv = st.getItem("favourites");
+    const favs = storage.getItem('favourites');
     const history = useHistory();
 
     const OnClickItem = (item) => {
         let parts = item.uri.split('/');
         let lastSegment = parts.pop() || parts.pop(); //handle trailing slashes
-        history.push({ pathname: '/recipeDetails/' + lastSegment, state: { recipe: item } })
+        history.push({ pathname: '/recipeDetails/' + lastSegment, state: { recipe: item } });
     }
 
     const createRecipeDetails = () => {
-        if (fv === null)
+        if (favs === null)
             return [];
         var result = [];
-        for (let key in fv) {
-            let val = fv[key];
+        for (let key in favs) {
+            let val = favs[key];
             result.push(
-
-                <Grid item xs={6} key={val.url}>
+                <Grid item xs={6} sm={4} md={3} lg={2} key={val.url}>
                     <RecipeCard
                         title={val.label} subTitle={val.calories}
                         image={val.image} key={val.url}
@@ -45,7 +43,7 @@ export default function FavoritePage() {
                 </Grid>
             </div>
         </>
-    )
+    );
 }
 
 const useStyles = makeStyles({

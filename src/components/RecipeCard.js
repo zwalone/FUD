@@ -23,10 +23,10 @@ export default function RecipeCard ({ title, subTitle, image, onClick }) {
                     title={title}
                 />
                 <CardContent>
-                    <Typography variant="h6" align="left" noWrap={true}>
+                    <Typography variant='h6' align='left' noWrap={true}>
                         {title}
                     </Typography>
-                    <Typography variant="body2" align="left">
+                    <Typography variant='body2' align='left'>
                         {subTitle}
                     </Typography>
                 </CardContent>
@@ -38,7 +38,7 @@ export default function RecipeCard ({ title, subTitle, image, onClick }) {
 const useStyles = makeStyles({
     root: {
         maxWidth: 345,
-        height: 'fit-content'
+        height: 'fit-content',
     },
     media: {
         height: 194,

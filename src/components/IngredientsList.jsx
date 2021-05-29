@@ -1,5 +1,5 @@
-import React from "react";
-import { IngredientListItem } from "./IngredientListItem";
+import React from 'react';
+import { IngredientListItem } from './IngredientListItem';
 
 export function IngredientsList({ ingredients, setIngredients, checkable }) {
   const setChecked = (i) => {
@@ -14,12 +14,11 @@ export function IngredientsList({ ingredients, setIngredients, checkable }) {
   }
 
   return (
-    <div style={{ width: "100%" }}>
+    <div style={{ width: '100%' }}>
       {ingredients?.map((ingredient, i) => (
         <IngredientListItem
           setChecked={() => {
             setChecked(i);
-            console.log(ingredient);
           }}
           checkable={checkable}
           ingredient={ingredient}

@@ -19,12 +19,12 @@ export default function SearchPage() {
     const fetchRecipes = () => {
         let p = phrase
         if (p === undefined || p === null || p.length === 0) {
-            p = "shrimp"
+            p = 'shrimp';
         }
 
         downloadRecipesQuery(p, 0, 100)
             .then(recipes => {
-                if (recipes === undefined) console.log("Failed to fetch (wrong keys?)");
+                if (recipes === undefined) console.log('Failed to fetch (wrong keys?)');
                 else {
                     setRecipes(recipes);
                     lastFetchCache = recipes;
@@ -59,7 +59,7 @@ export default function SearchPage() {
     }
 
     const OnClickItem = (item) => {
-        history.push({ pathname: '/recipeDetails/' + escape(item.uri), state: { recipe: item } })
+        history.push({ pathname: '/recipeDetails/' + escape(item.uri), state: { recipe: item } });
     }
 
     return (
@@ -68,7 +68,7 @@ export default function SearchPage() {
             <div className={classes.root}>
                 <Grid container spacing={1} justify='center'>
                     {recipes.map(recipe =>
-                        <Grid item xs={6} key={recipe.url}>
+                        <Grid item xs={6} sm={4} md={3} lg={2} key={recipe.url}>
                             <RecipeCard
                                 title={recipe.label} subTitle={recipe.calories}
                                 image={recipe.image} key={recipe.url}
@@ -81,9 +81,9 @@ export default function SearchPage() {
     )
 }
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles({
     root: {
         margin: 8,
         minHeight: '100vh',
     },
-}))
+});

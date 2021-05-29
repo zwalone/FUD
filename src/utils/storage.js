@@ -18,7 +18,7 @@ export function getItem(key) {
 ///Sets an object or string for the given key from localStorage
 export function setItem(key, item) {
     var serializedItem = item
-    if (typeof item !== "string") {
+    if (typeof item !== 'string') {
         serializedItem = JSON.stringify(item) //ASK: throw an exception on failure? 
     }
     storage.setItem(key, serializedItem);
