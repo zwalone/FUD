@@ -21,7 +21,7 @@ export default function BottomNavigationBar({ pathname }) {
     useEffect(() => {
         if (pathname === "")
             setValue("search"); //force component rerender
-    }, [])
+    }, [pathname])
 
     return (
         <BottomNavigation value={value} onChange={handleChange} className={classes.root}>

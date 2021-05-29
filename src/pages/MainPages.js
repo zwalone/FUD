@@ -2,17 +2,16 @@ import React, { Fragment } from 'react';
 import BottomNavigationBar from '../components/BottomNavigation';
 import FavoritePage from './FavoritePage';
 import SearchPage from './SearchPage';
-import { getSegment } from '../utils/urlUtils'
-import { Redirect } from 'react-router-dom'
+import { getPathnameSegment } from '../utils/urlUtils'
 
 export default function MainPages() {
-    const pathname = getSegment(1);
+    const pathname = getPathnameSegment(1);
 
     return (
         <Fragment>
             { pathname === "favorites" ? <FavoritePage /> :
                 <SearchPage />}
-            <BottomNavigationBar onChange={() => { }} pathname={pathname} />
+            <BottomNavigationBar pathname={pathname} />
         </Fragment>
     )
 }
