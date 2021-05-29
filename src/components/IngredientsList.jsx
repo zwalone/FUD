@@ -8,14 +8,14 @@ export function IngredientsList({ ingredients, setIngredients, checkable }) {
   };
 
   if (!checkable) {
-    ingredients = ingredients.map((ingredient) => {
+    ingredients = ingredients?.map((ingredient) => {
       return { name: ingredient, checked: false };
     });
   }
 
   return (
     <div style={{ width: "100%" }}>
-      {ingredients.map((ingredient, i) => (
+      {ingredients?.map((ingredient, i) => (
         <IngredientListItem
           setChecked={() => {
             setChecked(i);

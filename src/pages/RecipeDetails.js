@@ -1,10 +1,10 @@
-import React, { useContext, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { makeStyles, withStyles } from "@material-ui/core/styles";
 import {
-  Accordion as MuiAccordion,
-  Typography,
-  AccordionSummary as MuiAccordionSummary,
-  AccordionDetails as MuiAccordionDetails,
+    Accordion as MuiAccordion,
+    Typography,
+    AccordionSummary as MuiAccordionSummary,
+    AccordionDetails as MuiAccordionDetails,
 } from "@material-ui/core";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import CloseIcon from "@material-ui/icons/Close";
@@ -14,258 +14,275 @@ import DeleteIcon from "@material-ui/icons/Delete";
 import FavoriteIcon from "@material-ui/icons/Favorite";
 import Fab from "@material-ui/core/Fab";
 import { useHistory } from "react-router-dom";
-import { RecipeDataContext } from "../data/RecipeDataContext";
 import { IngredientsList } from "../components/IngredientsList";
 import * as storage from '../utils/storage'
-
+import { downloadRecipeByID } from "../data/RecipeSearchData"
 
 const Accordion = withStyles({
-  root: {
-    '&:before': {
-      backgroundColor: "white",
+    root: {
+        '&:before': {
+            backgroundColor: "white",
+        },
+        '&$expanded': {
+            margin: 0,
+        },
     },
-    '&$expanded': {
-      margin: 0,
-    },
-  },
-  expanded: {},
+    expanded: {},
 })(MuiAccordion);
 
 const AccordionSummary = withStyles({
-  root: {
-    minHeight: 0,
-    '&$expanded': {
-      minHeight: 0,
+    root: {
+        minHeight: 0,
+        '&$expanded': {
+            minHeight: 0,
+        },
     },
-  },
-  content: {
-    margin: 0,
-    '&$expanded': {
-      margin: 0,
+    content: {
+        margin: 0,
+        '&$expanded': {
+            margin: 0,
+        },
     },
-  },
-  expanded: {},
+    expanded: {},
 })(MuiAccordionSummary);
 
 const AccordionDetails = withStyles({
-  root: {
-    paddingRight: "1em",
-    paddingLeft: "1em",
-    paddingTop: 0,
-    paddingBottom: 0,
-  },
+    root: {
+        paddingRight: "1em",
+        paddingLeft: "1em",
+        paddingTop: 0,
+        paddingBottom: 0,
+    },
 })(MuiAccordionDetails);
 
-export default function RecipeDetails() {
-  const history = useHistory();
-  const styles = useStyles();
-  const { currentRecipe } = useContext(RecipeDataContext);
 
-  //returns false if recipe is not found in the favourites dictionary
-  //otherwise true
-  const isFavouriteInit = () => {
+//returns false if recipe is not found in the favourites dictionary
+//otherwise true
+const isFavouriteInit = (recipe) => {
     let favs = storage.getItem("favourites");
     if (favs === null)
         return false;
-    return favs[currentRecipe?.uri] !== undefined;
-  }
+    return favs[recipe?.uri] !== undefined;
+}
 
-  const [isFavourite, setIsFavourite] = useState(isFavouriteInit());
-  const [ingredients, setIngredients] = useState(currentRecipe.ingredients);
+export default function RecipeDetails() {
+    const history = useHistory();
+    const styles = useStyles();
+    const [recipe, setRecipe] = useState(history?.location?.state?.recipe);
+    const [ingredients, setIngredients] = useState(recipe?.ingredients);
+    const [isFavourite, setIsFavourite] = useState(isFavouriteInit(recipe));
 
-  const onFABClick = () => {
-    let favs = storage.getItem("favourites");
-    if (favs === null)
-        storage.setItem("favourites", {}); //create a new favourites dictionary if one does not exist
-    //use dict to reduce lookup time to O(1)
-    if (favs[currentRecipe.uri] !== undefined) {
-        delete favs[currentRecipe.uri] //if currentRecipe is already in the dictionary
-        setIsFavourite(false);
-        //remove it.
+
+
+    useEffect(() => {
+        if (recipe === undefined) {
+            //fetch recipe using URL
+            let n = window.location.href.search("recipeDetails") + "recipeDetails".length + 1;
+            let uri = window.location.href.slice(n);
+            downloadRecipeByID(uri).then(x => {
+                setRecipe(x)
+            });
+        }
+    }, [recipe])
+
+
+    const onFABClick = () => {
+        let favs = storage.getItem("favourites");
+        if (favs === null)
+            storage.setItem("favourites", {}); //create a new favourites dictionary if one does not exist
+        //use dict to reduce lookup time to O(1)
+        if (favs[recipe.uri] !== undefined) {
+            delete favs[recipe.uri] //if recipe is already in the dictionary
+            setIsFavourite(false);
+            //remove it.
+        }
+        else {
+            favs[recipe.uri] = recipe; //otherwise add it 
+            setIsFavourite(true);
+        }
+        storage.setItem("favourites", favs); //update item after modification
     }
-    else {
-        favs[currentRecipe.uri] = currentRecipe; //otherwise add it 
-        setIsFavourite(true);
+
+    const OnClickClose = () => {
+        history.goBack(); //TODO: handle going back in invalid state
+    };
+
+
+    if (recipe === null || recipe === undefined) {
+        return (<></>);
     }
-    storage.setItem("favourites", favs); //update item after modification
-  }
+    console.log(recipe)
+    return (
+        <div className={styles.container}>
+            {/* {Image & icons} */}
 
-  if (currentRecipe === null) {
-      history.push("/");
-      return(<></>);
-  }
-  
-  const OnClickClose = () => {
-    history.goBack();
-  };
-
-  return (
-    <div className={styles.container}>
-      {/* {Image & icons} */}
-
-      <div className={styles.imageBox}>
-        <div className={styles.icons}>
-          <Button onClick={() => OnClickClose()} className={styles.IconLeft}>
-            <CloseIcon />
-          </Button>
-          <Button href={`${currentRecipe.url}`}  className={styles.IconRight}>
-            <LinkIcon />
-          </Button>
-        </div>
-        <img className={styles.image} src={currentRecipe?.image} alt="recipe" />
-      </div>
-
-      {/* {Title} */}
-
-      <div className={styles.safeArea}>
-        <Typography className={styles.title}>{currentRecipe?.label}</Typography>
-        <div className={styles.details}>
-          <Typography className={styles.detailsLeft}>
-            {currentRecipe?.calories}
-          </Typography>
-          <Typography className={styles.detailsRight}>
-            {currentRecipe?.servings}
-          </Typography>
-        </div>
-      </div>
-
-      {/* {Ingredients} */}
-
-      <Accordion elevation={0}>
-        <AccordionSummary
-          expandIcon={<ExpandMoreIcon />}
-          aria-controls="panel1bh-content"
-          id="panel1bh-header"
-        >
-          <Typography variant="h6">Ingredients</Typography>
-        </AccordionSummary>
-        <AccordionDetails>
-          <IngredientsList
-            ingredients={ingredients}
-            setIngredients={(ingred) => {
-              setIngredients(ingred);
-            }}
-          />
-        </AccordionDetails>
-      </Accordion>
-
-      {/* {Nutrients} */}
-
-      <Accordion elevation={0}>
-        <AccordionSummary
-          expandIcon={<ExpandMoreIcon />}
-          aria-controls="panel1bh-content"
-          id="panel1bh-header"
-        >
-          <Typography variant="h6">Nutrients Info</Typography>
-        </AccordionSummary>
-        <div className={styles.safeArea}>
-          {currentRecipe?.nutrients.map((e, key) => {
-            return (
-              <AccordionDetails key={key} className={styles.accordionDetails}>
-                <div className={styles.nutrition}>
-                  <Typography className={styles.detailsLeft}>
-                    {e.label}
-                  </Typography>
-                  <Typography className={styles.detailsRight}>
-                    {e.quantity} {e.unit}
-                  </Typography>
+            <div className={styles.imageBox}>
+                <div className={styles.icons}>
+                    <Button onClick={() => OnClickClose()} className={styles.IconLeft}>
+                        <CloseIcon />
+                    </Button>
+                    <Button href={`${recipe?.url}`} className={styles.IconRight}>
+                        <LinkIcon />
+                    </Button>
                 </div>
-              </AccordionDetails>
-            );
-          })}
+                <img className={styles.image} src={recipe?.image} alt="recipe" />
+            </div>
+
+            {/* {Title} */}
+
+            <div className={styles.safeArea}>
+                <Typography className={styles.title}>{recipe?.label}</Typography>
+                <div className={styles.details}>
+                    <Typography className={styles.detailsLeft}>
+                        {recipe?.calories}
+                    </Typography>
+                    <Typography className={styles.detailsRight}>
+                        {recipe?.servings}
+                    </Typography>
+                </div>
+            </div>
+
+
+
+            {/* {Ingredients} */}
+
+            <Accordion elevation={0}>
+                <AccordionSummary
+                    expandIcon={<ExpandMoreIcon />}
+                    aria-controls="panel1bh-content"
+                    id="panel1bh-header"
+                >
+                    <Typography variant="h6">Ingredients</Typography>
+                </AccordionSummary>
+                <AccordionDetails>
+                    {(recipe?.ingredients !== undefined) ? <IngredientsList
+                        ingredients={ingredients}
+                        setIngredients={(ingred) => {
+                            setIngredients(ingred);
+                        }}
+                    /> : null}
+
+                </AccordionDetails>
+            </Accordion>
+
+
+            {/* {Nutrients} */}
+
+            <Accordion elevation={0}>
+                <AccordionSummary
+                    expandIcon={<ExpandMoreIcon />}
+                    aria-controls="panel1bh-content"
+                    id="panel1bh-header"
+                >
+                    <Typography variant="h6">Nutrients Info</Typography>
+                </AccordionSummary>
+                <div className={styles.safeArea}>
+                    {recipe?.nutrients?.map((e, key) => {
+                        return (
+                            <AccordionDetails key={key} className={styles.accordionDetails}>
+                                <div className={styles.nutrition}>
+                                    <Typography className={styles.detailsLeft}>
+                                        {e.label}
+                                    </Typography>
+                                    <Typography className={styles.detailsRight}>
+                                        {e.quantity} {e.unit}
+                                    </Typography>
+                                </div>
+                            </AccordionDetails>
+                        );
+                    })}
+                </div>
+            </Accordion>
+
+            {/* Add Favorites button */}
+
+            <Fab onClick={onFABClick} className={styles.floatingButton} color="secondary">
+                {isFavourite ? <DeleteIcon /> : <FavoriteIcon />}
+            </Fab>
         </div>
-      </Accordion>
-
-      {/* Add Favorites button */}
-
-      <Fab onClick={onFABClick} className={styles.floatingButton} color="secondary">
-          {isFavourite ? <DeleteIcon /> : <FavoriteIcon />}
-      </Fab>
-    </div>
-  );
+    );
 }
 
 const useStyles = makeStyles((theme) => ({
-  container: {
-    marginBottom: 50,
-    overflowX: "hidden",
-  },
-  imageBox: {
-    position: "relative",
-    height: 192,
-    overflow: "hidden",
-  },
-  image: {
-    width: "100%",
-    position: "absolute",
-    top: 0,
-    bottom: 0,
-    left: 0,
-    right: 0,
-    margin: "auto",
-    zIndex: -1,
-  },
-  icons: {
-    width: "100%",
-    justifyContent: "space-between",
-  },
-  IconLeft: {
-    position: "absolute",
-    top: 8,
-    left: 0,
-    color: "white",
-  },
-  IconRight: {
-    position: "absolute",
-    top: 8,
-    right: 0,
-    color: "white",
-  },
-  title: {
-    fontSize: "1.75em",
-    textAlign: "start",
-    fontWeight: "bold",
-    lineHeight: "1.0em",
-    paddingTop: "0.5em",
-  },
-  safeArea: {
-    paddingLeft: "1em",
-    paddingRight: "1em",
-    display: "flex",
-    flexDirection: "column",
-  },
-  details: {
-    paddingTop: "0.5em",
-    paddingBottom: "0.5em",
-    width: "100%",
-    justifyContent: "space-between",
-  },
-  nutrition: {
-    width: "100%",
-    justifyContent: "space-between",
-  },
-  detailsLeft: {
-    float: "left",
-    display: "inline",
-    width: "50%",
-    textAlign: "start",
-    fontSize: "1em",
-  },
-  detailsRight: {
-    float: "right",
-    display: "inline",
-    width: "50%",
-    textAlign: "end",
-    fontSize: "1em",
-  },
-  description: {
-    fontSize: "1em",
-    textAlign: "start",
-  },
-  floatingButton: {
-    position: "fixed",
-    bottom: 16,
-    right: 16,
-  },
+    container: {
+        marginBottom: 50,
+        overflowX: "hidden",
+    },
+    imageBox: {
+        position: "relative",
+        height: 192,
+        overflow: "hidden",
+    },
+    image: {
+        width: "100%",
+        position: "absolute",
+        top: 0,
+        bottom: 0,
+        left: 0,
+        right: 0,
+        margin: "auto",
+        zIndex: -1,
+    },
+    icons: {
+        width: "100%",
+        justifyContent: "space-between",
+    },
+    IconLeft: {
+        position: "absolute",
+        top: 8,
+        left: 0,
+        color: "white",
+    },
+    IconRight: {
+        position: "absolute",
+        top: 8,
+        right: 0,
+        color: "white",
+    },
+    title: {
+        fontSize: "1.75em",
+        textAlign: "start",
+        fontWeight: "bold",
+        lineHeight: "1.0em",
+        paddingTop: "0.5em",
+    },
+    safeArea: {
+        paddingLeft: "1em",
+        paddingRight: "1em",
+        display: "flex",
+        flexDirection: "column",
+    },
+    details: {
+        paddingTop: "0.5em",
+        paddingBottom: "0.5em",
+        width: "100%",
+        justifyContent: "space-between",
+    },
+    nutrition: {
+        width: "100%",
+        justifyContent: "space-between",
+    },
+    detailsLeft: {
+        float: "left",
+        display: "inline",
+        width: "50%",
+        textAlign: "start",
+        fontSize: "1em",
+    },
+    detailsRight: {
+        float: "right",
+        display: "inline",
+        width: "50%",
+        textAlign: "end",
+        fontSize: "1em",
+    },
+    description: {
+        fontSize: "1em",
+        textAlign: "start",
+    },
+    floatingButton: {
+        position: "fixed",
+        bottom: 16,
+        right: 16,
+    },
 }));
