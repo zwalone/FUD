@@ -16,7 +16,7 @@ export default function BottomNavigationBar({ pathname }) {
 
     //Fix for root pathname
     useEffect(() => {
-        if (pathname === '')
+        if (pathname === '' || pathname === 'FUD')
             setValue('search'); //force component rerender
     }, [pathname]);
 
