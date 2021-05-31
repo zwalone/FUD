@@ -1,8 +1,8 @@
 {
   "files": {
-    "main.css": "/FUD/static/css/main.1635e87c.chunk.css",
-    "main.js": "/FUD/static/js/main.3010a0aa.chunk.js",
-    "main.js.map": "/FUD/static/js/main.3010a0aa.chunk.js.map",
+    "main.css": "/FUD/static/css/main.9d5b29c0.chunk.css",
+    "main.js": "/FUD/static/js/main.005b60d1.chunk.js",
+    "main.js.map": "/FUD/static/js/main.005b60d1.chunk.js.map",
     "runtime-main.js": "/FUD/static/js/runtime-main.2987f5e4.js",
     "runtime-main.js.map": "/FUD/static/js/runtime-main.2987f5e4.js.map",
     "static/js/2.03a695c8.chunk.js": "/FUD/static/js/2.03a695c8.chunk.js",
@@ -12,13 +12,13 @@
     "index.html": "/FUD/index.html",
     "service-worker.js": "/FUD/service-worker.js",
     "service-worker.js.map": "/FUD/service-worker.js.map",
-    "static/css/main.1635e87c.chunk.css.map": "/FUD/static/css/main.1635e87c.chunk.css.map",
+    "static/css/main.9d5b29c0.chunk.css.map": "/FUD/static/css/main.9d5b29c0.chunk.css.map",
     "static/js/2.03a695c8.chunk.js.LICENSE.txt": "/FUD/static/js/2.03a695c8.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
     "static/js/runtime-main.2987f5e4.js",
     "static/js/2.03a695c8.chunk.js",
-    "static/css/main.1635e87c.chunk.css",
-    "static/js/main.3010a0aa.chunk.js"
+    "static/css/main.9d5b29c0.chunk.css",
+    "static/js/main.005b60d1.chunk.js"
   ]
 }
