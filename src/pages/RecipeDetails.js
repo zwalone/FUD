@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState,useCallback } from 'react';
 import { makeStyles, withStyles } from '@material-ui/core/styles';
 import {
     Accordion as MuiAccordion,
@@ -15,7 +15,7 @@ import FavoriteIcon from '@material-ui/icons/Favorite';
 import Fab from '@material-ui/core/Fab';
 import { useHistory } from 'react-router-dom';
 import { IngredientsList } from '../components/IngredientsList';
-import * as storage from '../utils/storage';
+import { Favourites } from '../utils/storage';
 import { downloadRecipeByID } from '../data/RecipeSearchData';
 
 const Accordion = withStyles({
@@ -55,51 +55,71 @@ const AccordionDetails = withStyles({
     },
 })(MuiAccordionDetails);
 
-//returns false if recipe is not found in the favourites dictionary
-//otherwise true
-const isFavouriteInit = (recipe) => {
-    let favs = storage.getItem('favourites');
-    if (favs === null)
-        return false;
-    return favs[recipe?.uri] !== undefined;
-}
+
 
 export default function RecipeDetails() {
     const history = useHistory();
     const styles = useStyles();
-    const [recipe, setRecipe] = useState(history?.location?.state?.recipe);
-    const [ingredients, setIngredients] = useState(recipe?.ingredients);
-    const [isFavourite, setIsFavourite] = useState(isFavouriteInit(recipe));
+
+    const [isFavourite, setIsFavourite] = useState(
+      Favourites.isFav(history.location.state.recipe.uri)
+    );
+
+    const [recipe, setRecipe] = useState(
+        Favourites.get(history.location.state.recipe.uri) ||
+        history.location.state.recipe
+    );
+
+    const setIngredients = (ingreds) =>{
+        let rec = {...recipe};
+        rec.ingredients = ingreds;
+        Favourites.set(rec)
+        setRecipe(rec)
+}
+
+const loadRecipe = useCallback((uri) => {
+  let url = "http://www.edamam.com/ontologies/" + uri;
+  if (Favourites.isFav(url) && !recipe?.ingredients[0]?.name) {
+    setRecipe(Favourites.get(url));
+  } else if (!recipe) {
+    (async () =>
+      await downloadRecipeByID(url).then((x) => {
+
+        setRecipe(x);
+      }))();
+  }
+},[recipe]);
 
     useEffect(() => {
-        if (recipe === undefined) {
-            //fetch recipe using URL
-            let n = window.location.href.search('recipeDetails') + 'recipeDetails'.length + 1;
-            let uri = window.location.href.slice(n);
-            downloadRecipeByID(uri).then(x => {
-                setRecipe(x);
-            });
-        }
-    }, [recipe])
+    let n = window.location.href.search(
+    "recipeDetails"
+    ) +
+    "recipeDetails".length +
+    1;
+    let uri = window.location.href.slice(n);
+    
+    loadRecipe(uri)
+    }, [recipe, loadRecipe])
+
+
+    
+  
 
     const onFABClick = () => {
-        let favs = storage.getItem('favourites');
-        if (favs === null)
-            storage.setItem('favourites', {}); //create a new favourites dictionary if one does not exist
-        //use dict to reduce lookup time to O(1)
-        if (favs[recipe.uri] !== undefined) {
-            delete favs[recipe.uri] //if recipe is already in the dictionary
+        if (isFavourite){
             setIsFavourite(false);
-            //remove it.
-        } else {
-            favs[recipe.uri] = recipe; //otherwise add it 
-            setIsFavourite(true);
+            Favourites.drop(recipe)
         }
-        storage.setItem('favourites', favs); //update item after modification
+        else{
+            setIsFavourite(true);
+            Favourites.set(recipe)
+            setRecipe(Favourites.get(recipe.uri))
+            
+        }
     }
 
     const OnClickClose = () => {
-        history.goBack(); //TODO: handle going back in invalid state
+        history.goBack(); 
     };
 
     if (recipe === null || recipe === undefined) {
@@ -146,12 +166,13 @@ export default function RecipeDetails() {
                     <Typography variant='h6'>Ingredients</Typography>
                 </AccordionSummary>
                 <AccordionDetails>
-                    {(recipe?.ingredients !== undefined) ? <IngredientsList
-                        ingredients={ingredients}
+                    {(recipe.ingredients) && <IngredientsList
+                    checkable={isFavourite}
+                        ingredients={recipe.ingredients}
                         setIngredients={(ingred) => {
                             setIngredients(ingred);
                         }}
-                    /> : null}
+                    />}
 
                 </AccordionDetails>
             </Accordion>
@@ -184,7 +205,7 @@ export default function RecipeDetails() {
                 </div>
             </Accordion>
 
-            {/* Add Favorites button */}
+            {/* Add Favourites button */}
 
             <Fab onClick={onFABClick} className={styles.floatingButton} color='secondary'>
                 {isFavourite ? <DeleteIcon /> : <FavoriteIcon />}

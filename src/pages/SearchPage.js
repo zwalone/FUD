@@ -58,9 +58,16 @@ export default function SearchPage() {
         setPhrase(input);
     }
 
+
     const OnClickItem = (item) => {
-        history.push({ pathname: '/recipeDetails/' + escape(item.uri), state: { recipe: item } });
-    }
+      let parts = item.uri.split("/");
+      let lastSegment = parts.pop() || parts.pop(); //handle trailing slashes
+      history.push({
+        pathname: "/recipeDetails/" + lastSegment,
+        state: { recipe: item },
+      });
+    };
+
 
     return (
         <Fragment>

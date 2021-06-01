@@ -7,15 +7,14 @@ export function IngredientsList({ ingredients, setIngredients, checkable }) {
     setIngredients([...ingredients]);
   };
 
-  if (!checkable) {
-    ingredients = ingredients?.map((ingredient) => {
+  if (!checkable && typeof ingredients[0] === "string") {
+    ingredients = ingredients.map((ingredient) => {
       return { name: ingredient, checked: false };
     });
   }
-
   return (
     <div style={{ width: '100%' }}>
-      {ingredients?.map((ingredient, i) => (
+      {ingredients.map((ingredient, i) => (
         <IngredientListItem
           setChecked={() => {
             setChecked(i);
