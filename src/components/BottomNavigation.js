@@ -8,20 +8,13 @@ import { Link } from 'react-router-dom';
 
 export default function BottomNavigationBar({ pathname }) {
     const classes = useStyles();
-    const [value, setValue] = useState(pathname);
 
-    const handleChange = (_, newValue) => {
-        setValue(newValue);
-    };
-
-    //Fix for root pathname
-    useEffect(() => {
-        if (pathname === '' || pathname === 'FUD')
-            setValue('search'); //force component rerender
-    }, [pathname]);
+    let p = pathname
+    if (pathname === '' || pathname === 'FUD')
+        p = 'search'
 
     return (
-        <BottomNavigation value={value} onChange={handleChange} className={classes.root}>
+        <BottomNavigation value={p} className={classes.root}>
             <BottomNavigationAction component={Link} to={'/search'} label='Search' value='search' icon={<SearchIcon />} classes={{ label: classes.label, root: classes.button, selected: classes.selected }} />
             <BottomNavigationAction component={Link} to={'/favorites'} label='Favorites' value='favorites' icon={<FavoriteIcon />} classes={{ label: classes.label, root: classes.button, selected: classes.selected }} />
         </BottomNavigation>
