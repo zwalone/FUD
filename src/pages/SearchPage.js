@@ -22,14 +22,14 @@ export default function SearchPage() {
             p = 'shrimp';
         }
 
-        downloadRecipesQuery(p, 0, 100)
+        downloadRecipesQuery(p, 0, 50)
             .then(recipes => {
                 if (recipes === undefined) console.log('Failed to fetch (wrong keys?)');
                 else {
                     setRecipes(recipes);
                     lastFetchCache = recipes;
                 }
-            })
+            });
     }
 
     //Fetch data on mount, only if cache does not contain anything
@@ -58,7 +58,6 @@ export default function SearchPage() {
         setPhrase(input);
     }
 
-
     const OnClickItem = (item) => {
         let parts = item.uri.split("#").pop();
         history.push({
@@ -66,7 +65,6 @@ export default function SearchPage() {
             state: { recipe: item },
         });
     };
-
 
     return (
         <Fragment>

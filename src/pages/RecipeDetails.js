@@ -55,8 +55,6 @@ const AccordionDetails = withStyles({
     },
 })(MuiAccordionDetails);
 
-
-
 export default function RecipeDetails() {
     const history = useHistory();
     const styles = useStyles();
@@ -73,8 +71,8 @@ export default function RecipeDetails() {
     const setIngredients = (ingreds) => {
         let rec = { ...recipe };
         rec.ingredients = ingreds;
-        Favourites.set(rec)
-        setRecipe(rec)
+        Favourites.set(rec);
+        setRecipe(rec);
     }
 
     const loadRecipe = useCallback((uri) => {
@@ -90,28 +88,20 @@ export default function RecipeDetails() {
     }, [recipe]);
 
     useEffect(() => {
-        let n = window.location.href.search(
-            "recipeDetails"
-        ) +
-            "recipeDetails".length +
-            1;
+        let n = window.location.href.search("recipeDetails") + "recipeDetails".length + 1;
         let uri = window.location.href.slice(n);
-        loadRecipe(uri)
-    }, [recipe, loadRecipe])
-
-
-
-
+        loadRecipe(uri);
+    }, [recipe, loadRecipe]);
 
     const onFABClick = () => {
         if (isFavourite) {
             setIsFavourite(false);
-            Favourites.drop(recipe)
+            Favourites.drop(recipe);
         }
         else {
             setIsFavourite(true);
-            Favourites.set(recipe)
-            setRecipe(Favourites.get(recipe.uri))
+            Favourites.set(recipe);
+            setRecipe(Favourites.get(recipe.uri));
         }
     }
 

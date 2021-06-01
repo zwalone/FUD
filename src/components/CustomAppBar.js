@@ -18,7 +18,15 @@ export default function CustomAppBar({ onSearch, canSearch }) {
 
     // Reacting for clicking search button in search bar:
     const searchButtonEvent = () => onSearch(searchBarInput.current.value);
-    
+
+    // Handle with clicking "Enter":
+    const keyPress = (e) => {
+        if (e.keyCode === 13) {
+            e.target.blur();
+            onSearch(searchBarInput.current.value);
+        }
+    }
+
     return (
         <div className={styles.root}>
             <AppBar position='static' className={styles.appBar}>
@@ -43,7 +51,8 @@ export default function CustomAppBar({ onSearch, canSearch }) {
                     <InputBase placeholder='Search for recipe'
                                inputRef={searchBarInput}
                                onChange={(input) => setCanClear(input.target.value.length > 0)}
-                               className={styles.searchBarInput}/>
+                               className={styles.searchBarInput}
+                               onKeyDown={keyPress}/>
                     {/* Clear */}
                     {canClear
                     ? 
