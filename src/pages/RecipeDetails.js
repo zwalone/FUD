@@ -1,4 +1,4 @@
-import React, { useEffect, useState,useCallback } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { makeStyles, withStyles } from '@material-ui/core/styles';
 import {
     Accordion as MuiAccordion,
@@ -62,7 +62,7 @@ export default function RecipeDetails() {
     const styles = useStyles();
 
     const [isFavourite, setIsFavourite] = useState(
-      Favourites.isFav(history.location.state.recipe.uri)
+        Favourites.isFav(history.location.state.recipe.uri)
     );
 
     const [recipe, setRecipe] = useState(
@@ -70,56 +70,53 @@ export default function RecipeDetails() {
         history.location.state.recipe
     );
 
-    const setIngredients = (ingreds) =>{
-        let rec = {...recipe};
+    const setIngredients = (ingreds) => {
+        let rec = { ...recipe };
         rec.ingredients = ingreds;
         Favourites.set(rec)
         setRecipe(rec)
-}
+    }
 
-const loadRecipe = useCallback((uri) => {
-  let url = "http://www.edamam.com/ontologies/" + uri;
-  if (Favourites.isFav(url) && !recipe?.ingredients[0]?.name) {
-    setRecipe(Favourites.get(url));
-  } else if (!recipe) {
-    (async () =>
-      await downloadRecipeByID(url).then((x) => {
-
-        setRecipe(x);
-      }))();
-  }
-},[recipe]);
+    const loadRecipe = useCallback((uri) => {
+        let url = "http://www.edamam.com/ontologies/edamam.owl#" + uri;
+        if (Favourites.isFav(url) && !recipe?.ingredients[0]?.name) {
+            setRecipe(Favourites.get(url));
+        } else if (!recipe) {
+            (async () =>
+                await downloadRecipeByID(url).then((x) => {
+                    setRecipe(x);
+                }))();
+        }
+    }, [recipe]);
 
     useEffect(() => {
-    let n = window.location.href.search(
-    "recipeDetails"
-    ) +
-    "recipeDetails".length +
-    1;
-    let uri = window.location.href.slice(n);
-    
-    loadRecipe(uri)
+        let n = window.location.href.search(
+            "recipeDetails"
+        ) +
+            "recipeDetails".length +
+            1;
+        let uri = window.location.href.slice(n);
+        loadRecipe(uri)
     }, [recipe, loadRecipe])
 
 
-    
-  
+
+
 
     const onFABClick = () => {
-        if (isFavourite){
+        if (isFavourite) {
             setIsFavourite(false);
             Favourites.drop(recipe)
         }
-        else{
+        else {
             setIsFavourite(true);
             Favourites.set(recipe)
             setRecipe(Favourites.get(recipe.uri))
-            
         }
     }
 
     const OnClickClose = () => {
-        history.goBack(); 
+        history.goBack();
     };
 
     if (recipe === null || recipe === undefined) {
@@ -167,7 +164,7 @@ const loadRecipe = useCallback((uri) => {
                 </AccordionSummary>
                 <AccordionDetails>
                     {(recipe.ingredients) && <IngredientsList
-                    checkable={isFavourite}
+                        checkable={isFavourite}
                         ingredients={recipe.ingredients}
                         setIngredients={(ingred) => {
                             setIngredients(ingred);

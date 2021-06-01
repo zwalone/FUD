@@ -14,7 +14,7 @@ export default function SearchPage() {
     const classes = useStyles();
     const history = useHistory();
     const [recipes, setRecipes] = useState(lastFetchCache);
-    const [phrase, setPhrase] = useState(getPathnameSegment(3)); //TODO: use query string
+    const [phrase, setPhrase] = useState(getPathnameSegment(3));
 
     const fetchRecipes = () => {
         let p = phrase
@@ -60,12 +60,11 @@ export default function SearchPage() {
 
 
     const OnClickItem = (item) => {
-      let parts = item.uri.split("/");
-      let lastSegment = parts.pop() || parts.pop(); //handle trailing slashes
-      history.push({
-        pathname: "/recipeDetails/" + lastSegment,
-        state: { recipe: item },
-      });
+        let parts = item.uri.split("#").pop();
+        history.push({
+            pathname: "/recipeDetails/" + parts,
+            state: { recipe: item },
+        });
     };
 
 
