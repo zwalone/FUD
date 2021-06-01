@@ -3,9 +3,9 @@ import { IngredientListItem } from './IngredientListItem';
 
 export function IngredientsList({ ingredients, setIngredients, checkable }) {
   const setChecked = (i) => {
-    console.log(ingredients)
+    (ingredients)
     ingredients[i].checked = !ingredients[i].checked;
-    console.log(ingredients)
+    (ingredients)
     setIngredients([...ingredients]);
   };
 
@@ -14,7 +14,7 @@ export function IngredientsList({ ingredients, setIngredients, checkable }) {
       return { name: ingredient, checked: false };
     });
   }
-  console.log(ingredients);
+  (ingredients);
   return (
     <div style={{ width: '100%' }}>
       {ingredients.map((ingredient, i) => (

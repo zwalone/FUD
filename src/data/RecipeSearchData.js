@@ -10,7 +10,7 @@ export const downloadRecipesQuery = (query, from, to) => {
     + `&app_key=${appKey}&q=${query}&from=${from}&to=${to}`)
     .then(response => response.json())
     .then(json => prepareCustomJSONs(json.hits))
-    .catch(error => console.log(error));
+    .catch(error => (error));
 };
 
 
@@ -20,5 +20,5 @@ export const downloadRecipeByID = (ID) => {
     + `&app_key=${appKey}&r=${ID}`)
     .then(response => response.json())
     .then(json => prepareCustomJSONsFromID(json))
-    .catch(error => console.log(error));
+    .catch(error => (error));
 };

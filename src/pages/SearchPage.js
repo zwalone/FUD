@@ -24,7 +24,7 @@ export default function SearchPage() {
 
         downloadRecipesQuery(p, 0, 100)
             .then(recipes => {
-                if (recipes === undefined) console.log('Failed to fetch (wrong keys?)');
+                if (recipes === undefined) ('Failed to fetch (wrong keys?)');
                 else {
                     setRecipes(recipes);
                     lastFetchCache = recipes;

@@ -62,7 +62,7 @@ const set = (obj) => {
 
 const drop = (uriOrObj) => {
   let favs = getAll();
-  console.log(favs);
+  (favs);
   if (typeof uriOrObj === "string") {
     delete favs[uriOrObj];
   } else {
