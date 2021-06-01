@@ -1,7 +1,7 @@
 // Removing unnecessary data and creating custom objects:
 export const prepareCustomJSONs = (jsons) => {
     // No recipe has been found:
-    if (jsons.length === 0) return 'No results';
+    if (jsons.length === 0) return [];
 
     // Some recipes have been found:
     return jsons.map(json => ({
@@ -19,7 +19,7 @@ export const prepareCustomJSONs = (jsons) => {
 //We need this function because API returns different structure, depending on q or r param
 export const prepareCustomJSONsFromID = (jsons) => {
     // No recipe has been found:
-    if (jsons.length === 0) return 'No results';
+    if (jsons.length === 0) return [];
 
     // Some recipes have been found:
     return jsons.map(json => ({

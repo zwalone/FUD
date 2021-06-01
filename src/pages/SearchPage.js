@@ -66,10 +66,13 @@ export default function SearchPage() {
         });
     };
 
+    console.log(recipes)
+
     return (
         <Fragment>
             <CustomAppBar canSearch={true} onSearch={input => OnSearchClick(input)} />
             <div className={classes.root}>
+                {recipes.length !== 0 ? 
                 <Grid container spacing={1} justify='center'>
                     {recipes.map(recipe =>
                         <Grid item xs={6} sm={4} md={3} lg={2} key={recipe.url}>
@@ -79,7 +82,9 @@ export default function SearchPage() {
                                 onClick={() => OnClickItem(recipe)} />
                         </Grid>
                     )}
-                </Grid>
+                </Grid> 
+                : <p>Nothing found :(</p>}
+
             </div>
         </Fragment>
     )
