@@ -6,7 +6,7 @@ import MainPages from './pages/MainPages';
 
 export default function App() {
   return (
-    <Router>
+    <Router basename="/FUD">
       <div className='App'>
         <Switch>
           <Route path='/recipeDetails' component={RecipeDetails} />
