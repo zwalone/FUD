@@ -11,8 +11,7 @@ export default function FavoritePage() {
     const history = useHistory();
 
     const OnClickItem = (item) => {
-        let parts = item.uri.split('/');
-        let lastSegment = parts.pop() || parts.pop(); //handle trailing slashes
+        let lastSegment = item.uri.split("#").pop();
         history.push({ pathname: '/recipeDetails/' + lastSegment, state: { recipe: item } });
     }
 
