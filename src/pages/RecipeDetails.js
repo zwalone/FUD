@@ -79,7 +79,6 @@ export default function RecipeDetails() {
 
 const loadRecipe = (uri) => {
   let url = "http://www.edamam.com/ontologies/" + uri;
-  (url);
   if (Favourites.isFav(url) && !recipe?.ingredients[0]?.name) {
     setRecipe(Favourites.get(url));
   } else if (!recipe) {
