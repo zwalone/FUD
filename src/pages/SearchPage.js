@@ -14,7 +14,7 @@ export default function SearchPage() {
     const classes = useStyles();
     const history = useHistory();
     const [recipes, setRecipes] = useState(lastFetchCache);
-    const [phrase, setPhrase] = useState(getPathnameSegment(2)); //TODO: use query string
+    const [phrase, setPhrase] = useState(getPathnameSegment(3)); //TODO: use query string
 
     const fetchRecipes = () => {
         let p = phrase
