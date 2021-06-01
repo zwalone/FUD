@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState,useCallback } from 'react';
 import { makeStyles, withStyles } from '@material-ui/core/styles';
 import {
     Accordion as MuiAccordion,
@@ -77,7 +77,7 @@ export default function RecipeDetails() {
         setRecipe(rec)
 }
 
-const loadRecipe = (uri) => {
+const loadRecipe = useCallback((uri) => {
   let url = "http://www.edamam.com/ontologies/" + uri;
   if (Favourites.isFav(url) && !recipe?.ingredients[0]?.name) {
     setRecipe(Favourites.get(url));
@@ -88,7 +88,7 @@ const loadRecipe = (uri) => {
         setRecipe(x);
       }))();
   }
-};
+},[recipe]);
 
     useEffect(() => {
     let n = window.location.href.search(
