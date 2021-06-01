@@ -17,7 +17,6 @@ import { useHistory } from 'react-router-dom';
 import { IngredientsList } from '../components/IngredientsList';
 import { Favourites } from '../utils/storage';
 import { downloadRecipeByID } from '../data/RecipeSearchData';
-import { Favorite, FavoriteSharp } from '@material-ui/icons';
 
 const Accordion = withStyles({
     root: {
@@ -61,65 +60,69 @@ const AccordionDetails = withStyles({
 export default function RecipeDetails() {
     const history = useHistory();
     const styles = useStyles();
+
     const [isFavourite, setIsFavourite] = useState(
-      Favourites.isFav(history.location.state.recipe)
+      Favourites.isFav(history.location.state.recipe.uri)
     );
+
     const [recipe, setRecipe] = useState(
         Favourites.get(history.location.state.recipe.uri) ||
         history.location.state.recipe
     );
-    const [ingredients, setIngredients] = useState(recipe?.ingredients);
 
-    /*
-                        let n = window.location.href.search('recipeDetails') + 'recipeDetails'.length + 1;
-            let uri = window.location.href.slice(n);
-            let url = "http://www.edamam.com/ontologies/"+uri
-                  downloadRecipeByID(uri).then((x) => {
-                setRecipe(x);
-    */
+    const setIngredients = (ingreds) =>{
+        let rec = {...recipe};
+        rec.ingredients = ingreds;
+        Favourites.set(rec)
+        setRecipe(rec)
+}
 
-                useEffect(() => {
-            let n =
-                window.location.href.search(
-                "recipeDetails"
-                ) +
-                "recipeDetails".length +
-                1;
-                let uri = window.location.href.slice(n);
-                
-                loadRecipe(uri)
-                //console.log(recipe)
-                }, [recipe])
+const loadRecipe = (uri) => {
+  let url = "http://www.edamam.com/ontologies/" + uri;
+  console.log(url);
+  if (Favourites.isFav(url) && !recipe?.ingredients[0]?.name) {
+    setRecipe(Favourites.get(url));
+  } else if (!recipe) {
+    (async () =>
+      await downloadRecipeByID(url).then((x) => {
+        console.log(url);
+        console.log(recipe);
+        console.log(x);
+        setRecipe(x);
+      }))();
+  }
+};
+
+    useEffect(() => {
+    let n = window.location.href.search(
+    "recipeDetails"
+    ) +
+    "recipeDetails".length +
+    1;
+    let uri = window.location.href.slice(n);
+    
+    loadRecipe(uri)
+    }, [recipe, loadRecipe])
 
 
-    const loadRecipe = (uri) => {
-        let url = "http://www.edamam.com/ontologies/" + uri;
-        console.log(url)
-        if(Favourites.isFav(url))
-        {
-            setRecipe(Favourites.get(url))
-        }
-        else{
-         (async () => await downloadRecipeByID(url).then((x) => {
-                console.log(url)
-                console.log(recipe)
-                console.log(x);
-                setRecipe(x);
-            }))();
-        } 
-    }
+    
   
 
     const onFABClick = () => {
         if (isFavourite){
+            setIsFavourite(false);
+            Favourites.drop(recipe)
         }
         else{
-
+            setIsFavourite(true);
+            Favourites.set(recipe)
+            setRecipe(Favourites.get(recipe.uri))
+            
         }
     }
 
     const OnClickClose = () => {
-        history.goBack(); //TODO: handle going back in invalid state
+        history.goBack(); 
     };
 
     if (recipe === null || recipe === undefined) {
