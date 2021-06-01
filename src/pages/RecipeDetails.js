@@ -85,27 +85,25 @@ export default function RecipeDetails() {
                 ) +
                 "recipeDetails".length +
                 1;
-            let uri = window.location.href.slice(n);
-                    
-                loadRecipe(uri)
+                let uri = window.location.href.slice(n);
+                let url = "http://www.edamam.com/ontologies/" + uri;
+                loadRecipe(url)
                 console.log(recipe)
                 }, [recipe])
 
 
-    const loadRecipe = (uri) => {
-        let recipe;
-        let url = "http://www.edamam.com/ontologies/" + uri;
-        if(Favourites.isFav())
+    const loadRecipe = (url) => {
+        console.log(url)
+        if(Favourites.isFav(url))
         {
-            recipe = Favourites.get(url)
+            setRecipe(Favourites.get(url))
         }
         else{
-         downloadRecipeByID(uri).then((x) => {
-                recipe=x;
-            });
-        }
-        console.log(recipe)
-        setRecipe(recipe)
+         (async () => await downloadRecipeByID(url).then((x) => {
+                console.log(x)
+                setRecipe(x);
+            }))();
+        } 
     }
   
 
