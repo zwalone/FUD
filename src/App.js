@@ -1,14 +1,18 @@
 import React from 'react';
 import './App.css';
-import CustomAppBar from './components/CustomAppBar';
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import RecipeDetails from './pages/RecipeDetails';
+import MainPages from './pages/MainPages';
 
-function App() {
+export default function App() {
   return (
-    <div className="App">
-      <CustomAppBar search={(output) => console.log(output)}/>
-      <p>[Empty Page]</p>
-    </div>
+    <Router basename="/FUD">
+      <div className='App'>
+        <Switch>
+          <Route path='/recipeDetails' component={RecipeDetails} />
+          <Route path='/' component={MainPages} />
+        </Switch>
+      </div>
+    </Router>
   );
 }
-
-export default App;
